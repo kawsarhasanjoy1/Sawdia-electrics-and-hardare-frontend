@@ -102,12 +102,16 @@ const Navbar = () => {
               <FaCartPlus size={25} />
             </Link>
 
-            <Link href="/favourite" className="relative text-gray-700">
-              <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
-                {favourite?.data?.length ? favourite?.data?.length : 0}
-              </p>
-              <BsBookmark size={25} />
-            </Link>
+            {user && user?.role === "user" ? (
+              <Link href="/favourite" className="relative text-gray-700">
+                <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
+                  {favourite?.data?.length ? favourite?.data?.length : 0}
+                </p>
+                <BsBookmark size={25} />
+              </Link>
+            ) : (
+              ""
+            )}
             {token ? (
               <button
                 onClick={() => handleLogout()}
@@ -136,7 +140,10 @@ const Navbar = () => {
         <nav className="hidden md:flex gap-9">
           {categories?.map((cat: any) => (
             <div key={cat?.name} className="relative group">
-              <Link href={`/category/${cat?.name.toLowerCase()}`} className="text-gray-700 hover:text-blue-600 transition font-medium">
+              <Link
+                href={`/products?${cat?.name.toLowerCase()}`}
+                className="text-gray-700 hover:text-blue-600 transition font-medium"
+              >
                 {cat?.name}
               </Link>
             </div>
