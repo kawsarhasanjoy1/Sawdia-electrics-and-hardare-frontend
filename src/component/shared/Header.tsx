@@ -136,21 +136,21 @@ const Navbar = () => {
           <Menu size={22} />
         </button>
         <nav className="hidden md:flex gap-9">
-          {categories.map((cat) => (
-            <div key={cat.name} className="relative group">
+          {categories?.map((cat) => (
+            <div key={cat?.name} className="relative group">
               <Link
-                href={`/category/${cat.name
+                href={`/category/${cat?.name
                   .toLowerCase()
                   .replace(/\s+/g, "-")}`}
                 className="text-gray-700 hover:text-blue-600 transition flex items-center"
               >
-                {cat.name}
+                {cat?.name}
               </Link>
 
               {/* Dropdown */}
-              {cat.sub.length > 0 && (
+              {cat?.sub?.length > 0 && (
                 <div className="absolute left-0 mt-2 w-48 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
-                  {cat.sub.map((sub) => (
+                  {cat?.sub.map((sub) => (
                     <Link
                       key={sub}
                       href={`/category/${sub
@@ -220,16 +220,16 @@ const Navbar = () => {
 
             {/* Existing Categories for mobile */}
             {categories.map((cat, index) => (
-              <div key={cat.name}>
+              <div key={cat?.name}>
                 <button
                   onClick={() => setDropdown(dropdown === index ? null : index)}
                   className="flex justify-between w-full text-gray-700 hover:text-blue-600 transition px-2 py-1"
                 >
-                  {cat.name}
-                  {cat.sub.length > 0 && <ChevronDown size={14} />}
+                  {cat?.name}
+                  {cat?.sub.length > 0 && <ChevronDown size={14} />}
                 </button>
                 {dropdown === index &&
-                  cat.sub.map((sub) => (
+                  cat?.sub.map((sub) => (
                     <Link
                       key={sub}
                       href={`/category/${sub

@@ -22,7 +22,6 @@ export type TProduct = {
     updatedAt: string;
   }[];
   sku: string;
-  slug: string;
   stock: number;
   warranty?: string;
   userId: string;
