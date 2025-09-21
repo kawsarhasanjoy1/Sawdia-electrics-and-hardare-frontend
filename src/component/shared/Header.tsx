@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, ChevronDown } from "lucide-react";
+import { Menu } from "lucide-react";
 import { IoHomeOutline } from "react-icons/io5";
 import { FaCartPlus, FaSearch } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
@@ -17,28 +17,26 @@ import { useRouter } from "next/navigation";
 import { clearCart } from "@/redux/api/features/cartSlice";
 
 const categories = [
-  { name: "Electronics", sub: ["Mobiles", "Laptops", "TVs"] },
-  { name: "Mobile Accessories", sub: ["Chargers", "Cables", "Cases"] },
-  { name: "Computers & Laptops", sub: ["Desktops", "Laptops", "Monitors"] },
+  { name: "Electronics" },
+  { name: "Mobile Accessories" },
+  { name: "Computers & Laptops" },
   {
     name: "Televisions & Home Entertainment",
-    sub: ["LED TVs", "Projectors", "Sound Systems"],
   },
-  { name: "Kitchen Appliances", sub: ["Mixers", "Ovens", "Microwaves"] },
-  { name: "Power Tools", sub: ["Drills", "Saws", "Grinders"] },
+  { name: "Kitchen Appliances" },
+  { name: "Power Tools" },
   {
     name: "Hardware & Construction",
-    sub: ["Nuts & Bolts", "Screws", "Hinges"],
   },
-  { name: "Lighting & Electrical", sub: ["Bulbs", "Wires", "Switches"] },
-  { name: "Cables & Wires", sub: ["USB", "HDMI", "Power Cables"] },
-  { name: "Gaming & Consoles", sub: ["PS5", "Xbox", "Accessories"] },
+  { name: "Lighting & Electrical" },
+  { name: "Cables & Wires" },
+  { name: "Gaming & Consoles" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const [dropdown, setDropdown] = useState<number | null>(null);
+  // const [dropdown, setDropdown] = useState<number | null>(null);
   const { data: favourite } = useGetSaveFavouriteProductQuery(undefined);
   const items = useAppSelector((store) => store.cart?.items);
   const { user, token } = useAppSelector((store) => store?.auth) as any;
@@ -136,33 +134,11 @@ const Navbar = () => {
           <Menu size={22} />
         </button>
         <nav className="hidden md:flex gap-9">
-          {categories?.map((cat) => (
+          {categories?.map((cat: any) => (
             <div key={cat?.name} className="relative group">
-              <Link
-                href={`/category/${cat?.name
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")}`}
-                className="text-gray-700 hover:text-blue-600 transition flex items-center"
-              >
+              <Link href={`/category/${cat?.name.toLowerCase()}`} className="text-gray-700 hover:text-blue-600 transition font-medium">
                 {cat?.name}
               </Link>
-
-              {/* Dropdown */}
-              {cat?.sub?.length > 0 && (
-                <div className="absolute left-0 mt-2 w-48 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
-                  {cat?.sub.map((sub) => (
-                    <Link
-                      key={sub}
-                      href={`/category/${sub
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
-                      className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                    >
-                      {sub}
-                    </Link>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </nav>
@@ -217,32 +193,6 @@ const Navbar = () => {
                 <MdOutlineAccountCircle size={22} /> My Account
               </Link>
             )}
-
-            {/* Existing Categories for mobile */}
-            {categories.map((cat, index) => (
-              <div key={cat?.name}>
-                <button
-                  onClick={() => setDropdown(dropdown === index ? null : index)}
-                  className="flex justify-between w-full text-gray-700 hover:text-blue-600 transition px-2 py-1"
-                >
-                  {cat?.name}
-                  {cat?.sub.length > 0 && <ChevronDown size={14} />}
-                </button>
-                {dropdown === index &&
-                  cat?.sub.map((sub) => (
-                    <Link
-                      key={sub}
-                      href={`/category/${sub
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
-                      className="block pl-4 py-1 text-gray-700 hover:text-blue-600"
-                      onClick={() => setOpen(false)}
-                    >
-                      {sub}
-                    </Link>
-                  ))}
-              </div>
-            ))}
           </nav>
         </div>
       )}
