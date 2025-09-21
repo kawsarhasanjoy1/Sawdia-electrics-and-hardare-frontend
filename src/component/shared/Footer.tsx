@@ -5,7 +5,6 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-gray-300 py-10 px-6 md:px-16">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Brand Section */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-3">Sawdia</h2>
           <p className="text-sm">
@@ -13,7 +12,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Quick Links */}
+
         <div>
           <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
           <ul className="space-y-2">
@@ -23,23 +22,23 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/shop" className="hover:text-blue-400">
+              <Link href="/products" className="hover:text-blue-400">
                 Shop
               </Link>
             </li>
             <li>
-              <Link href="/categories" className="hover:text-blue-400">
-                Categories
+              <Link href="/blog" className="hover:text-blue-400">
+                Blog
               </Link>
             </li>
             <li>
-              <Link href="/about" className="hover:text-blue-400">
-                About Us
+              <Link href="/favourite" className="hover:text-blue-400">
+                Favourite
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-blue-400">
-                Contact
+              <Link href="/login" className="hover:text-blue-400">
+                Login
               </Link>
             </li>
           </ul>
