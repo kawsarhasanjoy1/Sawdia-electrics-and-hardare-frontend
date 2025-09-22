@@ -21,7 +21,7 @@ interface YearlyData {
 const UserYearlyChart = () => {
   const { data } = useGetUserYearlyBuyQuery(undefined);
   const chartData: YearlyData[] = data?.data;
-  console.log(chartData)
+
   return (
     <div className="w-full h-96 p-4 bg-white rounded-2xl shadow">
       <h2 className="text-xl font-semibold mb-4">

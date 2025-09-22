@@ -5,16 +5,28 @@ import { useAppSelector } from "@/redux/hooks";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useAddPaymentMutation } from "@/redux/api/orderApi";
-import { removeFromCart, clearCart } from "@/redux/api/features/cartSlice";
+import {
+  removeFromCart,
+  clearCart,
+  updateQuantity,
+  increaseQuantity,
+  decreaseQuantity,
+} from "@/redux/api/features/cartSlice";
 import { FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useGetCouponsQuery } from "@/redux/api/couponApi";
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const cart = useAppSelector((state) => state.cart.items);
   const { userId } = useAppSelector((state: any) => state.auth.user);
+  const { data: CouponData } = useGetCouponsQuery({
+    isActive: true,
+    limit: 1,
+  });
+  const coupons = CouponData?.data?.data;
   const [shippingAddress, setShippingAddress] = useState({
     line1: "",
     city: "",
@@ -23,10 +35,8 @@ const CartPage = () => {
   });
   const [couponCode, setCouponCode] = useState("");
   const [notes, setNotes] = useState("");
-
   const [addPayment, { isLoading }] = useAddPaymentMutation();
 
-  // subtotal calculation
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -59,6 +69,7 @@ const CartPage = () => {
       const products = cart.map((item) => ({
         productId: item._id,
         quantity: item.quantity,
+        price: totalAmount,
       }));
 
       const res = await addPayment({
@@ -83,6 +94,15 @@ const CartPage = () => {
       toast.error(error?.data?.message || "Payment failed");
     }
   };
+
+  const handleIncreaseQuantity = (id: string) => {
+    dispatch(increaseQuantity({ id }));
+  };
+
+  const handleDecreaseQuantity = (id: string) => {
+    dispatch(decreaseQuantity({ id }));
+  };
+
   const handleRemoveItem = (id: string) => {
     dispatch(removeFromCart(id));
     toast.info("Item removed from cart");
@@ -125,11 +145,31 @@ const CartPage = () => {
                 />
                 <div>
                   <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-sm text-gray-500">
-                    {item.quantity} × ${item.price}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    {/* Decrease Button */}
+                    <button
+                      onClick={() => handleDecreaseQuantity(item._id)}
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      –
+                    </button>
+
+                    <span className="px-2">{item.quantity}</span>
+
+                    {/* Increase Button */}
+                    <button
+                      onClick={() => handleIncreaseQuantity(item._id)}
+                      className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+
+                    <p className="text-sm text-gray-500">× ${item.price}</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Price + Remove */}
               <div className="flex items-center gap-4">
                 <p className="font-semibold">${item.price * item.quantity}</p>
                 <button
@@ -181,6 +221,18 @@ const CartPage = () => {
         </div>
         <div className="p-5 border rounded-lg bg-white shadow-sm space-y-3">
           <h2 className="text-xl font-semibold">Extra</h2>
+          <p>
+            COUPON CODE :{" "}
+            {coupons?.length > 0 ? (
+              <span className=" text-blue-500">
+                {new Date(coupons?.[0]?.expiryDate) > new Date()
+                  ? coupons?.[0]?.code
+                  : "Expired"}
+              </span>
+            ) : (
+              "No active coupon"
+            )}
+          </p>
           <input
             type="text"
             placeholder="Coupon Code"

@@ -10,6 +10,7 @@ import {
 } from "@/redux/api/productsApi";
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/api/features/cartSlice";
+import { useGetCouponsQuery } from "@/redux/api/couponApi";
 
 const ProductCard = ({ product }: { product: TProduct }) => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,14 @@ const ProductCard = ({ product }: { product: TProduct }) => {
   const isFavourite = favourite?.some(
     (item: any) => item?.productId?._id === product?._id
   );
-
+  const { data: CouponData } = useGetCouponsQuery({ isActive: true, limit: 1 });
+  const coupons = CouponData?.data?.data;
+  const activeCoupon =
+    coupons?.[0] &&
+    coupons?.[0]?.isActive === true &&
+    new Date(coupons[0]?.expiryDate) < new Date()
+      ? coupons?.[0]
+      : "";
   const handleTofavourite = async (id: string) => {
     try {
       const res = await saveProduct(id).unwrap();
@@ -36,7 +44,11 @@ const ProductCard = ({ product }: { product: TProduct }) => {
       addToCart({
         _id: product._id,
         name: product.name,
-        price: product.price,
+        price: activeCoupon
+          ? product?.price
+          : product?.discountPrice
+          ? product?.discountPrice
+          : product?.price,
         images: product.images,
         quantity: 1,
       })
@@ -64,9 +76,32 @@ const ProductCard = ({ product }: { product: TProduct }) => {
             {product?.name}
           </h3>
           <div className="mt-2 flex items-center justify-between gap-1">
-            <p className="md:text-lg text-md md:font-bold font-semibold text-green-600">
-              ${product?.price.toFixed(0)}
-            </p>
+            <div className="md:text-lg text-md md:font-bold font-semibold text-green-600">
+              <div className="flex items-center gap-4">
+                {activeCoupon ? (
+                  <>
+                    <span className="text-xl text-green-500">
+                      ৳{product?.price.toFixed(0)}
+                    </span>
+                  </>
+                ) : product?.discountPrice ? (
+                  <>
+                    <span
+                      className={`${
+                        product?.discountPrice ? "text-green-500 text-xl" : ""
+                      }`}
+                    >
+                      ৳{product?.discountPrice?.toFixed(0)}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-xl font-bold text-green-600">
+                    ৳{product?.price?.toFixed(0)}
+                  </span>
+                )}
+              </div>
+              {/* ${product?.price.toFixed(0)} */}
+            </div>
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }, (_, i) => (
                 <FaStar

@@ -9,19 +9,32 @@ import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/api/features/cartSlice";
 import { TProduct } from "@/interface/global";
 import { toast } from "react-toastify";
+import { useGetCouponsQuery } from "@/redux/api/couponApi";
 
 interface ProductDetailsProps {
   product: any;
 }
 const ProductDetails = ({ product }: ProductDetailsProps) => {
   const dispatch = useAppDispatch();
+  const { data: CouponData } = useGetCouponsQuery({ isActive: true, limit: 1 });
+  const coupons = CouponData?.data?.data;
+  const activeCoupon =
+    coupons?.[0] &&
+    coupons?.[0]?.isActive === true &&
+    new Date(coupons[0]?.expiryDate) > new Date()
+      ? coupons?.[0]
+      : "";
   const [currentImage, setCurrentImage] = useState(0);
   const handleAddToCart = (product: TProduct) => {
     dispatch(
       addToCart({
         _id: product._id,
         name: product.name,
-        price: product.price,
+        price: activeCoupon
+          ? product?.price
+          : product?.discountPrice
+          ? product?.discountPrice
+          : product?.price,
         images: product.images,
         quantity: 1,
       })
@@ -90,12 +103,28 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
           <p className="text-gray-600 text-lg">{product?.description}</p>
 
           <div className="flex items-center gap-4">
-            <span className="text-2xl font-bold text-indigo-600">
-              ৳{product?.price}
-            </span>
-            {product?.discountPrice && (
-              <span className="text-lg line-through text-gray-400">
-                ৳{product?.discountPrice}
+            {activeCoupon ? (
+              <>
+                <span className="text-2xl text-green-500">
+                  ৳{product?.price.toFixed(0)}
+                </span>
+              </>
+            ) : product?.discountPrice ? (
+              <>
+                <span className="text-2xl text-gray-500 line-through">
+                  ৳{product?.price?.toFixed(0)}
+                </span>
+                <span
+                  className={`${
+                    product?.discountPrice ? "text-green-300 text-2xl" : ""
+                  }`}
+                >
+                  ৳{product?.discountPrice?.toFixed(0)}
+                </span>
+              </>
+            ) : (
+              <span className="text-2xl font-bold text-green-600">
+                ৳{product?.price?.toFixed(0)}
               </span>
             )}
           </div>

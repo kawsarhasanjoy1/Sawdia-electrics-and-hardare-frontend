@@ -12,10 +12,13 @@ export const couponApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.coupon],
     }),
     getCoupons: build.query({
-      query: () => ({
-        url: "coupon",
-        method: "GET",
-      }),
+      query: (filters) => {
+        const query = new URLSearchParams(filters).toString();
+        return {
+          url: `coupon?${query}`,
+          method: "GET",
+        };
+      },
       providesTags: [tagTypes.coupon],
     }),
     updateCoupon: build.mutation({
