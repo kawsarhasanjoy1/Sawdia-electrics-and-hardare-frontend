@@ -25,7 +25,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
   const activeCoupon =
     coupons?.[0] &&
     coupons?.[0]?.isActive === true &&
-    new Date(coupons[0]?.expiryDate) < new Date()
+    new Date(coupons[0]?.expiryDate) > new Date()
       ? coupons?.[0]
       : "";
   const handleTofavourite = async (id: string) => {

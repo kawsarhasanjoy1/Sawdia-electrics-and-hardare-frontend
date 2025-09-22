@@ -31,7 +31,7 @@ const Products = () => {
       <div className="w-full flex justify-center items-center mb-8">
         <SearchBox
           placeholder="Search product"
-          className="w-3/12 border px-4 py-2 border-gray-400 focus:outline-none rounded-md"
+          className="md:w-3/12 w-full border px-4 py-2 border-gray-400 focus:outline-none rounded-md"
           value={filters?.searchTerm}
           onChange={(e) =>
             setFilters((prev) => ({

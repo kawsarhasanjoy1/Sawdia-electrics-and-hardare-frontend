@@ -8,7 +8,6 @@ import { useAddPaymentMutation } from "@/redux/api/orderApi";
 import {
   removeFromCart,
   clearCart,
-  updateQuantity,
   increaseQuantity,
   decreaseQuantity,
 } from "@/redux/api/features/cartSlice";

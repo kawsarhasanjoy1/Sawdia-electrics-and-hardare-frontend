@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { toast } from "react-toastify";
-import { RotateCcw, Trash2 } from "lucide-react";
+import {  Trash2 } from "lucide-react";
 import ReusableTable from "@/component/dashboard/ui/ReusableTable";
 import SearchBox from "@/component/dashboard/ui/SearchInput";
 import Pagination from "@/component/ui/Paginate/Pagination";
