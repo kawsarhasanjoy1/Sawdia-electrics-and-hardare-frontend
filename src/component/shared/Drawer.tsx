@@ -36,7 +36,7 @@ const Drawer = () => {
     removeCookies("accessToken");
     setTimeout(() => {
       router.push("/login");
-    }, 200);
+    }, 100);
   };
 
   const renderMenu = (items: any[], level = 0) => {

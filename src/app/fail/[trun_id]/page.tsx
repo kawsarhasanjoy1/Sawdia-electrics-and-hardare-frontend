@@ -2,17 +2,12 @@
 
 import Link from "next/link";
 import { XCircle } from "lucide-react";
-import React, { useEffect } from "react";
-import { useFailPaymentMutation } from "@/redux/api/orderApi";
+
+
 
 const PaymentFailedPage = ({ params }: any) => {
   const { trun_id } = params;
-  const [successPayment] = useFailPaymentMutation();
-  useEffect(() => {
-    if (trun_id) {
-      successPayment(trun_id);
-    }
-  }, [trun_id, successPayment]);
+ 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-rose-100 px-4">
       <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8 text-center space-y-6 animate-fade-in">

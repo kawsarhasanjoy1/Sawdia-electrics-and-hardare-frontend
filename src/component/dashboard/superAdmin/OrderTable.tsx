@@ -1,14 +1,14 @@
 import ReusableTable from "../ui/ReusableTable";
 import {
   useGetOrdersQuery,
-  useUpdatePaymentStatusMutation,
+  useUpdateOrderStatusMutation,
 } from "@/redux/api/orderApi";
 import { toast } from "react-toastify";
 
 export const PendingOrder = () => {
-  const { data: orderData } = useGetOrdersQuery({ status: "pending" });
-  const order = orderData?.data || [];
-  const [upStatus] = useUpdatePaymentStatusMutation();
+  const { data: orderData } = useGetOrdersQuery({ status: "PENDING" });
+  const order = orderData?.data?.data || [];
+  const [upStatus] = useUpdateOrderStatusMutation();
   const handleToStatus = async (e: any) => {
     const status = { id: e?.id, status: e?.status };
     try {

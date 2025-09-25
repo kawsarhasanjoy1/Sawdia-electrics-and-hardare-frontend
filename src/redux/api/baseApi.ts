@@ -4,7 +4,7 @@ import { TagTypeList } from "../tagTypes";
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: axiosBaseQuery({ baseUrl: "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/" }),
+  baseQuery: axiosBaseQuery({ baseUrl: "http://localhost:5000/api/v1/" }),
   endpoints: () => ({}),
   tagTypes: TagTypeList
 });

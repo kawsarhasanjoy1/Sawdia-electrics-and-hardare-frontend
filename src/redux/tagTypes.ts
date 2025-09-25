@@ -8,7 +8,7 @@ export enum tagTypes {
   parentC = "parent-category",
   category = "category",
   brand = "brand",
-  payment = "payment",
+  payment = "payment2",
   blog = "blog",
 }
 

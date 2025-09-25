@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { useAddPaymentMutation } from "@/redux/api/orderApi";
 import {
   removeFromCart,
   clearCart,
@@ -15,6 +14,7 @@ import { FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetCouponsQuery } from "@/redux/api/couponApi";
+import { useInitPaymentMutation } from "@/redux/api/paymentApi2";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -26,15 +26,17 @@ const CartPage = () => {
     limit: 1,
   });
   const coupons = CouponData?.data?.data;
+  const [couponCode, setCouponCode] = useState("");
+
   const [shippingAddress, setShippingAddress] = useState({
     line1: "",
     city: "",
     postcode: "",
     phone: "",
   });
-  const [couponCode, setCouponCode] = useState("");
+
   const [notes, setNotes] = useState("");
-  const [addPayment, { isLoading }] = useAddPaymentMutation();
+  const [addPayment, { isLoading }] = useInitPaymentMutation();
 
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -67,8 +69,9 @@ const CartPage = () => {
     try {
       const products = cart.map((item) => ({
         productId: item._id,
+        name: item?.name,
         quantity: item.quantity,
-        price: totalAmount,
+        price: item?.price,
       }));
 
       const res = await addPayment({
@@ -80,14 +83,13 @@ const CartPage = () => {
         totalAmount,
       }).unwrap();
 
-      if (res?.success && res?.url) {
+      if (res?.success && res?.data?.redirectUrl) {
         dispatch(clearCart());
         toast.success("Redirecting to payment...");
-        router.push(res?.url);
+        router.push(res?.data?.redirectUrl);
       } else {
         toast.error("payment url not found");
       }
-      console.log(res);
     } catch (error: any) {
       console.log(error);
       toast.error(error?.data?.message || "Payment failed");

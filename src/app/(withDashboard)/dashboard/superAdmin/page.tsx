@@ -1,6 +1,5 @@
 "use client";
 import SalesRechart from "@/component/dashboard/superAdmin/SalesRechart";
-import { useGetStatsQuery } from "@/redux/api/orderApi";
 import { useAppSelector } from "@/redux/hooks";
 import Link from "next/link";
 import {
@@ -14,6 +13,7 @@ import OnlineUserList from "@/component/Home/OnlineUser/OnlineUser";
 import UserTable from "@/component/dashboard/superAdmin/UserTable";
 import { PendingOrder } from "@/component/dashboard/superAdmin/OrderTable";
 import LowStockProductsTable from "@/component/dashboard/superAdmin/LowStockProductsTable";
+import { useGetStatsQuery } from "@/redux/api/orderApi";
 
 const DashboardSuperAdminHome = () => {
   const { data } = useGetStatsQuery(undefined);

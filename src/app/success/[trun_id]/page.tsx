@@ -2,18 +2,17 @@
 
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
-import React, { useEffect } from "react";
-import { useSuccessPaymentMutation } from "@/redux/api/orderApi";
+import { use } from "react";
+import { useGetPaymentsQuery } from "@/redux/api/paymentApi2";
 
-const PaymentSuccessPage = ({ params }: any) => {
-  const { trun_id } = params;
-  console.log(trun_id);
-  const [successPayment, { data }] = useSuccessPaymentMutation();
-  useEffect(() => {
-    if (trun_id) {
-      successPayment(trun_id);
-    }
-  }, [trun_id, successPayment]);
+const PaymentSuccessPage = ({
+  params,
+}: {
+  params: Promise<{ trun_id: string }>;
+}) => {
+  const { trun_id } = use(params);
+  const { data } = useGetPaymentsQuery({ transactionId: trun_id });
+  const payment = data?.data?.data;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 px-4">
@@ -36,8 +35,10 @@ const PaymentSuccessPage = ({ params }: any) => {
             <span className="text-green-600 font-bold">Paid</span>
           </p>
           <p className="text-gray-700">
-            <span className="font-semibold">Amount:</span> $
-            {data?.data?.totalAmount}
+            <span className="font-semibold">
+              Amount:{payment?.[0]?.rawValidation?.amount}
+            </span>{" "}
+            ${/* {data?.data?.totalAmount} */}
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-4 justify-center">

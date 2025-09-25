@@ -33,7 +33,9 @@ const BrandForm = () => {
     })) || [];
 
   const handleCategoryChange = (value: string) => {
-    const selectedCat = categories?.data?.data?.find((cat: any) => cat._id === value);
+    const selectedCat = categories?.data?.data?.find(
+      (cat: any) => cat._id === value
+    );
     if (!selectedCat) return;
 
     setSelectedCategory(selectedCat.name as AllCategoryName);
@@ -43,7 +45,6 @@ const BrandForm = () => {
   };
 
   const onSubmit = async (values: FieldValues) => {
-    console.log(values);
     try {
       const res = await createBrand(values).unwrap();
       if (res.success) {
@@ -104,7 +105,7 @@ const BrandForm = () => {
               disabled={!selectedCategory || brandOptions.length === 0}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 transition-all duration-300" />
-        
+
               <span className="relative z-10">Create Brand</span>
             </motion.button>
           </div>

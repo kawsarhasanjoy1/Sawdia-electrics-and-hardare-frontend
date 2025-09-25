@@ -9,7 +9,7 @@ import axios, {
 } from "axios";
 
 const instance = axios.create({
-  baseURL: "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1",
+  baseURL: "http://localhost:5000/api/v1",
   withCredentials: true,
   headers: {
     Accept: "application/json",
@@ -43,7 +43,7 @@ instance.interceptors.response.use(
     if (error.response?.status === 401) {
       try {
         const res = await axios.post(
-          "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/auth/refresh-token",
+          "http://localhost:5000/api/v1/auth/refresh-token",
           {},
           { withCredentials: true }
         );

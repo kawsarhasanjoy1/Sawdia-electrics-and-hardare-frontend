@@ -1,43 +1,53 @@
 "use client";
-import { Trash2 } from "lucide-react";
-import {
-  useGetUserOrdersQuery,
-  useRestoreOrderMutation,
-  useSoftDeletedOrderMutation,
-} from "@/redux/api/orderApi";
+import { useGetUserOrdersQuery } from "@/redux/api/orderApi";
 import ReusableTable from "@/component/dashboard/ui/ReusableTable";
+import Pagination from "@/component/ui/Paginate/Pagination";
+import { useState } from "react";
+import SearchBox from "@/component/dashboard/ui/SearchInput";
 import { toast } from "react-toastify";
+import { Copy } from "lucide-react";
+
+const money = (n?: number, currency = "BDT") =>
+  typeof n === "number"
+    ? n.toLocaleString(undefined, { style: "currency", currency })
+    : "—";
+
+const paymentFromStatus = (status?: string) => {
+  const s = String(status || "").toUpperCase();
+  if (s === "PAID") return "SUCCESS";
+  if (s === "FAILED" || s === "CANCELLED") return "FAILED";
+  return "PENDING";
+};
 
 const MyOrderPage = () => {
-  const { data } = useGetUserOrdersQuery({});
-  const [softDeleteOrder] = useSoftDeletedOrderMutation();
-  const [restoreOrder] = useRestoreOrderMutation();
+  const [filters, setFilters] = useState({
+    searchTerm: "",
+    page: 1,
+    limit: 10,
+  });
+  const { data } = useGetUserOrdersQuery(undefined);
+  const order = data?.data?.data;
+  const meta = data?.data?.meta;
 
-  const handleToDeleted = async (id: string) => {
-    try {
-      const res = await softDeleteOrder(id).unwrap();
-      if (res?.success) toast.success(res?.message);
-    } catch (err: any) {
-      toast.error(err?.data?.message);
-    }
-  };
-
-  const handleToRestore = async (id: string) => {
-    try {
-      const res = await restoreOrder(id).unwrap();
-      if (res?.success) toast.success(res?.message);
-    } catch (err: any) {
-      toast.error(err?.data?.message);
-    }
-  };
   const columns = [
     {
-      key: "tran_id",
+      key: "transactionId",
       header: "Transaction ID",
       render: (row: any) => (
-        <span className="font-semibold text-sm text-shadow-2xs">
-          {row.tran_id}
-        </span>
+        <div className=" flex items-center gap-1">
+          <span className="font-mono text-sm">{row.transactionId}</span>
+          <button
+            title="Copy"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(row.transactionId || "");
+                toast.success("Transaction ID copied");
+              } catch {
+                toast.info("Copy not available");
+              }
+            }}
+          ><Copy size={14} /></button>
+        </div>
       ),
     },
     {
@@ -55,34 +65,30 @@ const MyOrderPage = () => {
     {
       key: "totalProducts",
       header: "Products",
-      render: (row: any) => <span>{row.products?.length || 0}</span>,
-    },
-    {
-      key: "totalAmount",
-      header: "Total (৳)",
-      render: (row: any) => <span>{row.totalAmount}</span>,
-    },
-    {
-      key: "paymentStatus",
-      header: "Payment",
       render: (row: any) => (
-        <span
-          className={
-            row.paymentStatus === "success" ? "text-green-600" : "text-red-600"
-          }
-        >
-          {row.paymentStatus}
-        </span>
+        <span className=" text-center">{row.products?.length || 0}</span>
       ),
     },
+    {
+      key: "totalPayable",
+      header: "Total (৳)",
+      render: (row: any) => <span>{money(row.totalPayable, "BDT")}</span>,
+    },
+
     {
       key: "status",
       header: "Order Status",
       render: (row: any) => (
         <span
-          className={row.status === "paid" ? "text-green-600" : "text-red-600"}
+          className={
+            row.status === "PAID"
+              ? "text-green-600"
+              : row.status === "CANCELLED" || row.status === "FAILED"
+              ? "text-red-600"
+              : "text-yellow-600"
+          }
         >
-          {row.status}
+          {paymentFromStatus(row.status)}
         </span>
       ),
     },
@@ -101,39 +107,31 @@ const MyOrderPage = () => {
     {
       key: "createdAt",
       header: "Date",
-      render: (row: any) => new Date(row.createdAt).toLocaleDateString(),
-    },
-    {
-      key: "actions",
-      header: "Actions",
-      render: (row: any) => (
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => handleToRestore(row._id)}
-            disabled={!row.isDeleted}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium bg-yellow-100 text-yellow-700 hover:bg-yellow-200 ${
-              row.isDeleted ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
-            }`}
-          >
-            Restore
-          </button>
-          <button
-            onClick={() => handleToDeleted(row._id)}
-            disabled={row.isDeleted}
-            className={`p-2 rounded-lg hover:bg-red-100 text-red-600 ${
-              row.isDeleted ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-            }`}
-          >
-            <Trash2 size={18} />
-          </button>
-        </div>
-      ),
+      render: (row: any) =>
+        row.createdAt ? new Date(row.createdAt).toLocaleDateString() : "—",
     },
   ];
 
   return (
-    <div>
-      <ReusableTable columns={columns} data={data?.data} />
+    <div className="space-y-4">
+      <div className=" flex justify-between">
+        <h1 className="text-xl font-semibold">My Orders</h1>
+        <SearchBox
+          onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
+          value={filters?.searchTerm}
+          placeholder="Enter your transactionId"
+        />
+      </div>
+      <div>
+        <ReusableTable columns={columns} data={order} />
+      </div>
+      <div className=" mt-5">
+        <Pagination
+          totalPages={meta?.totalPage}
+          page={filters.page}
+          onPageChange={(e) => setFilters((prev) => ({ ...prev, e }))}
+        />
+      </div>
     </div>
   );
 };

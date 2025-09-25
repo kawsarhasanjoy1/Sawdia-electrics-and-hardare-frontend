@@ -3,110 +3,86 @@ import { baseApi } from "./baseApi";
 
 const orderApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    addPayment: build.mutation({
-      query: (data) => ({
-        url: "payment/order-payment",
-        method: "POST",
-        data,
-      }),
-      invalidatesTags: [tagTypes.payment],
-    }),
-    successPayment: build.mutation({
-      query: (id) => ({
-        url: `payment/payment-success/${id}`,
-        method: "POST",
-      }),
-      invalidatesTags: [tagTypes.payment],
-    }),
-    updatePaymentStatus: build.mutation({
-      query: ({ id, status }) => ({
-        url: `payment/update-status/${id}`,
+    updateOrderStatus: build.mutation({
+      query: ({ transactionId, status }) => ({
+        url: `order/up-status/${transactionId}`,
         method: "PATCH",
         data: { status },
       }),
       invalidatesTags: [tagTypes.payment],
     }),
-    failPayment: build.mutation({
-      query: (id) => ({
-        url: `payment/payment-fail/${id}`,
-        method: "POST",
-      }),
-      invalidatesTags: [tagTypes.payment],
-    }),
+
     getOrders: build.query({
       query: (query: any) => {
         const params = new URLSearchParams(query).toString();
         return {
-          url: `payment?${params}`,
+          url: `order?${params}`,
           method: "GET",
         };
       },
-      providesTags: [tagTypes.payment],
+      providesTags: [tagTypes.order],
     }),
     getUserOrders: build.query({
       query: (query: any) => {
         const params = new URLSearchParams(query).toString();
         return {
-          url: `payment/my-order?${params}`,
+          url: `order/my-order?${params}`,
           method: "GET",
         };
       },
-      providesTags: [tagTypes.payment],
+      providesTags: [tagTypes.order],
     }),
     getStats: build.query({
       query: () => ({
-        url: `payment/stats`,
+        url: `order/stats`,
         method: "GET",
       }),
-      providesTags: [tagTypes.payment],
+      providesTags: [tagTypes.order],
     }),
     getMonthlySales: build.query({
       query: () => ({
-        url: `payment/monthly-sales`,
+        url: `order/monthly-sales`,
         method: "GET",
       }),
-      providesTags: [tagTypes.payment],
+      providesTags: [tagTypes.order],
     }),
 
     getUserStats: build.query({
       query: () => ({
-        url: `payment/user-stats`,
+        url: `order/user-stats`,
         method: "GET",
       }),
-      providesTags: [tagTypes.payment],
+      providesTags: [tagTypes.order],
     }),
     getUserYearlyBuy: build.query({
       query: () => ({
-        url: `payment/user-yearly-buy`,
+        url: `order/user-yearly-buy`,
         method: "GET",
       }),
-      providesTags: [tagTypes.payment],
+      providesTags: [tagTypes.order],
     }),
     softDeletedOrder: build.mutation({
       query: (id) => ({
-        url: `payment/delete-my-order/${id}`,
+        url: `order/delete-my-order/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.payment],
+      invalidatesTags: [tagTypes.order],
     }),
     restoreOrder: build.mutation({
       query: (id) => ({
-        url: `payment/restored-my-order/${id}`,
+        url: `order/restored-my-order/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tagTypes.payment],
+      invalidatesTags: [tagTypes.order],
     }),
   }),
 });
 
 export const {
-  useAddPaymentMutation,
-  useSuccessPaymentMutation,
-  useFailPaymentMutation,
   useGetStatsQuery,
   useGetMonthlySalesQuery,
   useGetOrdersQuery,
-  useUpdatePaymentStatusMutation,
+  useUpdateOrderStatusMutation,
   useGetUserStatsQuery,
   useGetUserYearlyBuyQuery,
   useGetUserOrdersQuery,

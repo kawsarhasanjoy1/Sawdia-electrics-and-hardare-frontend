@@ -1,5 +1,12 @@
 import { USER_ROLE } from "@/constance/global";
-import { FaBlogger, FaGift, FaPercent, FaShoppingCart, FaTicketAlt, FaUserShield } from "react-icons/fa";
+import {
+  FaBlogger,
+  FaGift,
+  FaPercent,
+  FaShoppingCart,
+  FaTicketAlt,
+  FaUserShield,
+} from "react-icons/fa";
 import { FaUsersGear } from "react-icons/fa6";
 import { GiPriceTag } from "react-icons/gi";
 import { IoAddCircleOutline } from "react-icons/io5";
@@ -108,6 +115,11 @@ const SideBarItem = (role: UserRole) => {
           icon: MdOutlineShoppingCart,
         },
         {
+          title: "Payments-history",
+          path: `/${role}/payments`,
+          icon: MdPayment,
+        },
+        {
           title: "Create Admin",
           path: `/${role}/create-admin`,
           icon: FaUserShield,
@@ -214,6 +226,11 @@ const SideBarItem = (role: UserRole) => {
           title: "Orders",
           path: `/${role}/orders`,
           icon: MdOutlineShoppingCart,
+        },
+          {
+          title: "Payments-history",
+          path: `/${role}/payments`,
+          icon: MdPayment,
         },
         {
           title: "Users",

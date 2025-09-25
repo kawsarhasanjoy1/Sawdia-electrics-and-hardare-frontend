@@ -9,7 +9,6 @@ const UserDashboardHome = () => {
   const { data } = useGetUserStatsQuery(undefined);
   const { user } = useAppSelector((store) => store.auth) as any;
   const stats = data?.data;
-
   const summaryData = [
     {
       title: "Total Products",

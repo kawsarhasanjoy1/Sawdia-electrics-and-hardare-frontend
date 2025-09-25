@@ -8,7 +8,8 @@ import { useGetCouponsQuery } from "@/redux/api/couponApi";
 
 const SeasonalOffersPage = () => {
   const { data } = useGetCouponsQuery(undefined);
-  const coupon = data?.data;
+  const coupon = data?.data?.data;
+  const discount = coupon?.[0]?.amount / coupon?.[0]?.minPurchase || 0;
 
   return (
     <section className="relative w-full bg-gradient-to-br from-[#fdfbfb] via-[#ebedee] to-[#e6e9f0] py-20">
@@ -26,7 +27,7 @@ const SeasonalOffersPage = () => {
 
         <div className="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
           {/* === BIG FEATURED OFFER === */}
-          <div className="lg:col-span-2 relative overflow-hidden rounded-[34px] shadow-2xl group w-full h-[300px] sm:h-[400px] lg:h-[500px]">
+          <div className="lg:col-span-2 relative overflow-hidden rounded-[34px] shadow-2xl group w-full h-[300px] sm:h-[400px] lg:h-full">
             <Image
               src="https://thumbs.dreamstime.com/b/discount-stamp-vector-clip-art-33305813.jpg"
               alt="Mega Discount"
@@ -46,7 +47,7 @@ const SeasonalOffersPage = () => {
                   <p className="text-sm sm:text-base md:text-lg leading-relaxed">
                     Get up to{" "}
                     <span className="font-bold text-yellow-300">
-                      {coupon[0].amount}%
+                      {discount}%
                     </span>{" "}
                     off on electronics when you shop over{" "}
                     <span className="font-bold">{coupon[0].minPurchase}৳</span>.

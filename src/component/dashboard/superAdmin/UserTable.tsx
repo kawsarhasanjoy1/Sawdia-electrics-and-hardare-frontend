@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   useDeleteUserMutation,
   useGetUserQuery,
@@ -15,8 +15,9 @@ const UserTable = () => {
   const [upUserStatus] = useUserStatusUpMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [restoreUser] = useRestoreUserMutation();
-  const { data: userData } = useGetUserQuery({ sort: "createdAt" });
+  const { data: userData } = useGetUserQuery({ sort: "-createdAt" });
   const user = userData?.data?.data;
+
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
       const res = await upUserStatus({ id: id, status: newStatus }).unwrap();

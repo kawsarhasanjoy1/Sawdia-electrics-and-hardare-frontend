@@ -36,7 +36,7 @@ export const OnlineProvider = ({
     if (!userId) return;
 
     if (!socket) {
-      socket = io("https://sawdia-electrics-and-hardare-backend.onrender.com", {
+      socket = io("http://localhost:5000", {
         withCredentials: true,
         transports: ["websocket"],
       });

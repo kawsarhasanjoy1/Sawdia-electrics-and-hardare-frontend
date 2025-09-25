@@ -5,6 +5,7 @@ import { ShoppingCart, Star } from "lucide-react";
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/api/features/cartSlice";
 import { toast } from "react-toastify";
+import { useGetCouponsQuery } from "@/redux/api/couponApi";
 
 const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
   const price = product?.price;
@@ -13,6 +14,17 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
     ? Math.round(((price - discountPrice) / price) * 100)
     : 0;
 
+  const { data: CouponData } = useGetCouponsQuery({ isActive: true, limit: 1 });
+  const coupons = CouponData?.data?.data;
+  const activeCoupon =
+    coupons?.[0] &&
+    coupons?.[0]?.isActive === true &&
+    new Date(coupons[0]?.expiryDate) > new Date()
+      ? coupons?.[0]
+      : "";
+  const percent = coupons?.[0]?.amount / coupons?.[0]?.minPurchase || 0;
+  const discount = product?.price * percent;
+
   const dispatch = useAppDispatch();
 
   const handleAddToCart = (product: any) => {
@@ -20,7 +32,11 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
       addToCart({
         _id: product._id,
         name: product.name,
-        price: product.price,
+        price: activeCoupon
+          ? product?.price
+          : product?.discountPrice
+          ? product?.discountPrice
+          : product?.price,
         images: product.images,
         quantity: 1,
       })
@@ -52,7 +68,7 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
         {discountPrice && (
           <span className="absolute top-4 left-4 px-4 py-1 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-pink-600 shadow-lg">
-            -{discountPercent}%
+            -{activeCoupon ? percent : discountPercent}%
           </span>
         )}
       </div>
@@ -94,7 +110,15 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
 
           {/* Price */}
           <div className="flex items-center gap-2 mt-3">
-            {discountPrice ? (
+            {activeCoupon ? (
+              <>
+                <span className="text-2xl font-extrabold text-indigo-600">
+                  {price}৳
+                </span>
+               
+
+              </>
+            ) : discountPrice ? (
               <>
                 <span className="text-2xl font-extrabold text-indigo-600">
                   {discountPrice}৳
