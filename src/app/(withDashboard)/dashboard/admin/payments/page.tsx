@@ -9,6 +9,7 @@ import {
   useGetPaymentsQuery,
   useUpdatePaymentStatusMutation,
 } from "@/redux/api/paymentApi2";
+import SearchBox from "@/component/dashboard/ui/SearchInput";
 
 const STATUSES = ["INITIATED", "VALID", "FAILED", "CANCELLED"] as const;
 
@@ -26,7 +27,7 @@ const AdminPaymentsPage = () => {
     limit: 10,
   });
 
-  const { data, isLoading } = useGetPaymentsQuery(filters);
+  const { data} = useGetPaymentsQuery(filters);
   const [updateStatus] = useUpdatePaymentStatusMutation();
 
   const payments = data?.data?.data;
@@ -143,33 +144,27 @@ const AdminPaymentsPage = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Payments</h1>
+      <div className=" flex justify-between">
+        <h1 className="text-2xl font-bold mb-4">Payment History</h1>
+        <SearchBox
+          onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
+          value={filters?.searchTerm}
+          placeholder="Enter your transactionId"
+        />
+      </div>
+      <>
+        <ReusableTable columns={columns} data={payments} />
 
-      {isLoading ? (
-        <div className="space-y-3">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="animate-pulse h-20 bg-white rounded-xl shadow-sm"
-            />
-          ))}
+        <div className="mt-6 flex items-center justify-center">
+          <Pagination
+            onPageChange={(newPage) =>
+              setFilters((prev) => ({ ...prev, page: newPage }))
+            }
+            page={filters?.page}
+            totalPages={meta?.totalPage}
+          />
         </div>
-      ) : (
-        <>
-          <ReusableTable columns={columns} data={payments} />
-
-          {/* Pagination */}
-          <div className="mt-6 flex items-center justify-center">
-            <Pagination
-              onPageChange={(newPage) =>
-                setFilters((prev) => ({ ...prev, page: newPage }))
-              }
-              page={filters?.page}
-              totalPages={meta?.totalPage}
-            />
-          </div>
-        </>
-      )}
+      </>
     </div>
   );
 };

@@ -31,12 +31,12 @@ const ProductForm = () => {
 
   const [createProduct, { isLoading }] = useCreateProductMutation();
   const { data: categoryData } = useGetAllCategoryQuery({ isDeleted: false });
-
+  console.log(categoryData);
   const { data: brands } = useGetAllBrandQuery({
     categoryId: selectedCat,
   });
 
-  const brand = brands?.data || [];
+  const brand = brands?.data?.data || [];
 
   const brandOptions = brand?.map((item: Record<string, any>) => ({
     label: item?.name,
@@ -44,7 +44,7 @@ const ProductForm = () => {
   }));
 
   const categoryArray =
-    categoryData?.data?.map((item: any) => ({
+    categoryData?.data?.data?.map((item: any) => ({
       value: item?._id,
       label: item?.name,
     })) || [];

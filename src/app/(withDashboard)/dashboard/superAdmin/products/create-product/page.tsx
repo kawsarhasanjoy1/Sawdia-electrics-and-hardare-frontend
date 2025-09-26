@@ -36,7 +36,7 @@ const ProductForm = () => {
     categoryId: selectedCat,
   });
 
-  const brand = brands?.data || [];
+  const brand = brands?.data?.data || [];
 
   const brandOptions = brand?.map((item: Record<string, any>) => ({
     label: item?.name,
@@ -44,7 +44,7 @@ const ProductForm = () => {
   }));
 
   const categoryArray =
-    categoryData?.data?.map((item: any) => ({
+    categoryData?.data?.data?.map((item: any) => ({
       value: item?._id,
       label: item?.name,
     })) || [];
@@ -108,6 +108,7 @@ const ProductForm = () => {
               type="number"
               name="discountPrice"
               label="Discount Price"
+              required={false}
             />
             <EHInput type="number" name="stock" label="Stock" />
             <EHInput type="text" name="warranty" label="Warranty" />

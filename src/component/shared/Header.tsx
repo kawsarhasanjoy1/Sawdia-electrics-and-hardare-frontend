@@ -10,12 +10,10 @@ import { TbLayoutDashboard } from "react-icons/tb";
 import { LuFileBox } from "react-icons/lu";
 import { useGetSaveFavouriteProductQuery } from "@/redux/api/productsApi";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { logOut } from "@/redux/api/features/authSlice";
-import { removeCookies } from "@/services/action/removeCookie";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { clearCart } from "@/redux/api/features/cartSlice";
-
+import { removeAllToken } from "@/utils/removeAllToken";
 const categories = [
   { name: "Electronics" },
   { name: "Mobile Accessories" },
@@ -36,20 +34,15 @@ const categories = [
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
-  // const [dropdown, setDropdown] = useState<number | null>(null);
   const { data: favourite } = useGetSaveFavouriteProductQuery(undefined);
   const items = useAppSelector((store) => store.cart?.items);
   const { user, token } = useAppSelector((store) => store?.auth) as any;
   const router = useRouter();
   const handleLogout = () => {
-    dispatch(logOut());
+    removeAllToken();
     dispatch(clearCart());
-    removeCookies("accessToken");
     toast.info("Logout successful");
-
-    setTimeout(() => {
-      router.push("/login");
-    }, 100);
+    router.push("/login");
   };
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50 max-w-screen mx-auto overflow-x-hidden overflow-y-hidden">
@@ -151,11 +144,9 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Mobile Menu */}
       {open && (
         <div className="md:hidden bg-gray-50 border-t shadow-sm">
           <nav className="flex flex-col p-4 space-y-3">
-            {/* Added Links for mobile */}
             <Link
               href="/products"
               className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"

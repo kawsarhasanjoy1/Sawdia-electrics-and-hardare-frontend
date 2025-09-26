@@ -23,7 +23,6 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
       ? coupons?.[0]
       : "";
   const percent = coupons?.[0]?.amount / coupons?.[0]?.minPurchase || 0;
-  const discount = product?.price * percent;
 
   const dispatch = useAppDispatch();
 
@@ -115,8 +114,6 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
                 <span className="text-2xl font-extrabold text-indigo-600">
                   {price}৳
                 </span>
-               
-
               </>
             ) : discountPrice ? (
               <>

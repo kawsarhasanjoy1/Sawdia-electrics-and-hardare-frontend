@@ -1,64 +1,55 @@
+// axios.ts
 "use client";
-import { setUser } from "@/redux/api/features/authSlice";
+import axios, { AxiosError } from "axios";
+import Cookies from "js-cookie";
 import { store } from "@/redux/store";
+import { setUser } from "@/redux/api/features/authSlice";
 import { decodedToken } from "@/utils/decodedToken";
-import axios, {
-  AxiosError,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from "axios";
+
+const ACCESS_COOKIE = "accessToken";
+const COOKIE_OPTS: any = { path: "/", sameSite: "Lax", expires: 10 as const };
+const REFRESH_URL = "https://sawdia-electrics-and-hardare-backend.onrender.com/auth/refresh-token";
 
 const instance = axios.create({
-  baseURL: "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1",
+  baseURL: "https://sawdia-electrics-and-hardare-backend.onrender.com/",
   withCredentials: true,
-  headers: {
-    Accept: "application/json",
-  },
-  timeout: 60000,
 });
 
-// ✅ Request interceptor
-instance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = store.getState().auth.token;
-    if (token) {
-      config.headers.Authorization = `${token}`; // Bearer token
-    }
+instance.interceptors.request.use((config: any) => {
+  const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
+  if (token) config.headers.Authorization = token;
 
-    // যদি data FormData হয়, তাহলে Content-Type না সেট করা (axios auto handle করবে)
-    if (!(config.data instanceof FormData)) {
-      config.headers["Content-Type"] = "application/json";
-    }
+  if (config.data && !(config.data instanceof FormData)) {
+    config.headers["Content-Type"] = "application/json";
+  }
 
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+  return config;
+});
 
-// ✅ Response interceptor
 instance.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  async (error: AxiosError) => {
-    // 401 error হলে refresh token try করা
-    if (error.response?.status === 401) {
-      try {
-        const res = await axios.post(
-          "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/auth/refresh-token",
-          {},
-          { withCredentials: true }
-        );
+  (res) => res,
+  async (err: AxiosError) => {
+    const original: any = err.config || {};
+    if (!err.response) return Promise.reject(err);
+    const isRefresh = String(original?.url || "").includes(
+      "/auth/refresh-token"
+    );
+    if (isRefresh || original._retry) return Promise.reject(err);
 
-        const token = res?.data?.accessToken;
-        if (token) {
-          const user = decodedToken(token);
-          store.dispatch(setUser({ user, token }));
-        }
-      } catch (refreshError) {
-        console.error("Refresh token failed", refreshError);
-      }
+    if (err.response.status === 401) {
+      original._retry = true;
+      const r = await axios.post(REFRESH_URL, {}, { withCredentials: true });
+      const token = (r as any)?.data?.data?.accessToken as string | undefined;
+      if (!token) return Promise.reject(err);
+
+      store.dispatch(setUser({ user: decodedToken(token), token }));
+      Cookies.set(ACCESS_COOKIE, token, COOKIE_OPTS);
+      instance.defaults.headers.common.Authorization = token;
+      original.headers = original.headers || {};
+      original.headers.Authorization = token;
+      return instance(original);
     }
-
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 

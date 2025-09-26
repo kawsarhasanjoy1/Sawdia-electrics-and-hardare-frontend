@@ -96,7 +96,8 @@ const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
         toast.success(res?.message);
         router.push(`/dashboard/${user?.role}/products`);
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error?.data?.message);
       console.error("Failed to update product:", error);
     }
   };
@@ -131,6 +132,7 @@ const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
             <EHInput type="text" name="sku" label="SKU" />
             <EHInput type="number" name="price" label="Price" />
             <EHInput
+              required={false}
               type="number"
               name="discountPrice"
               label="Discount Price"

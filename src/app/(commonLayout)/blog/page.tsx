@@ -12,9 +12,11 @@ export const metadata = generateMetadata({
 
 const BlogPage = async () => {
   const res = await getBlogApi();
+
   const blogs = res?.data?.data;
   const categoryData = await getParentCategoryAPi();
   const categories = categoryData?.data?.data;
+
   return (
     <div className="container mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-10">
       <div className="lg:col-span-3 space-y-6">

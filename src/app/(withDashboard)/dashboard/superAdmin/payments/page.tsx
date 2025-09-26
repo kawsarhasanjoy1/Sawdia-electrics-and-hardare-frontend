@@ -9,6 +9,7 @@ import {
   useGetPaymentsQuery,
   useUpdatePaymentStatusMutation,
 } from "@/redux/api/paymentApi2";
+import SearchBox from "@/component/dashboard/ui/SearchInput";
 
 const STATUSES = ["INITIATED", "VALID", "FAILED", "CANCELLED"] as const;
 
@@ -143,7 +144,14 @@ const AdminPaymentsPage = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Payments</h1>
+      <div className=" flex justify-between">
+        <h1 className="text-2xl font-bold mb-4">Payment History</h1>
+        <SearchBox
+          onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
+          value={filters?.searchTerm}
+          placeholder="Enter your transactionId"
+        />
+      </div>
 
       {isLoading ? (
         <div className="space-y-3">

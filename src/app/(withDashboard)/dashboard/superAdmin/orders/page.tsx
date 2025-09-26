@@ -1,10 +1,12 @@
 "use client";
 import ReusableTable from "@/component/dashboard/ui/ReusableTable";
+import SearchBox from "@/component/dashboard/ui/SearchInput";
 import Pagination from "@/component/ui/Paginate/Pagination";
 import {
   useGetOrdersQuery,
   useUpdateOrderStatusMutation,
 } from "@/redux/api/orderApi";
+import { Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -44,7 +46,23 @@ const OrdersPage = () => {
       key: "transactionId",
       header: "Transaction ID",
       render: (row: any) => (
-        <span className="font-mono">{row?.transactionId}</span>
+        <div className=" flex gap-2">
+          <span className="font-mono">{row?.transactionId}</span>
+          <button
+            title="Copy"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(row.transactionId);
+                toast.success("copied");
+              } catch (err: any) {
+                toast.error(err?.message || "copied error");
+              }
+            }}
+            className="font-mono"
+          >
+            <Copy size={15} />
+          </button>
+        </div>
       ),
     },
     {
@@ -138,7 +156,14 @@ const OrdersPage = () => {
 
   return (
     <div className="bg-gray-50 p-6">
-      <h1 className="text-2xl font-bold mb-4">Orders</h1>
+      <div className=" flex justify-between">
+        <h1 className="text-2xl font-bold mb-4">Order History</h1>
+        <SearchBox
+          onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
+          value={filters?.searchTerm}
+          placeholder="Enter your transactionId"
+        />
+      </div>
       <ReusableTable columns={columns} data={orders} />
       <div className="mt-6 flex items-center justify-center">
         <Pagination

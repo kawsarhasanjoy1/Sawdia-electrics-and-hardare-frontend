@@ -1,5 +1,6 @@
 "use client";
 import ReusableTable from "@/component/dashboard/ui/ReusableTable";
+import SearchBox from "@/component/dashboard/ui/SearchInput";
 import Pagination from "@/component/ui/Paginate/Pagination";
 import {
   useGetOrdersQuery,
@@ -137,7 +138,14 @@ const OrdersPage = () => {
 
   return (
     <div className="bg-gray-50 p-6">
-      <h1 className="text-2xl font-bold mb-4">Orders</h1>
+       <div className=" flex justify-between">
+        <h1 className="text-2xl font-bold mb-4">Orders</h1>
+        <SearchBox
+          onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
+          value={filters?.searchTerm}
+          placeholder="Enter your transactionId"
+        />
+      </div>
       <ReusableTable columns={columns} data={orders} />
       <div className="mt-6 flex items-center justify-center">
         <Pagination
