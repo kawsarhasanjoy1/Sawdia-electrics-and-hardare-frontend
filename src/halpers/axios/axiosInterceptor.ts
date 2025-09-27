@@ -12,9 +12,17 @@ const REFRESH_URL =
   "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/auth/refresh-token";
 
 const instance = axios.create({
-  baseURL: "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v/",
+  baseURL: "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/",
   withCredentials: true,
 });
+
+let allowRefresh = true;
+export const disableRefresh = () => {
+  allowRefresh = false;
+};
+export const enableRefresh = () => {
+  allowRefresh = true;
+};
 
 instance.interceptors.request.use((config: any) => {
   const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
@@ -35,7 +43,8 @@ instance.interceptors.response.use(
     const isRefresh = String(original?.url || "").includes(
       "auth/refresh-token"
     );
-    if (isRefresh || original._retry) return Promise.reject(err);
+    if (isRefresh || original._retry || !allowRefresh)
+      return Promise.reject(err);
 
     if (err.response.status === 401) {
       original._retry = true;

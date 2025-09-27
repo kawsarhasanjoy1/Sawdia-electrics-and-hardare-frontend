@@ -10,8 +10,7 @@ const UserProfilePage = () => {
   const [changePass] = useChangePasswordMutation();
   const { data } = useGetMeQuery(undefined);
   const superAdmin = data?.data || {};
-  const paymentHistory = payment?.data;
-
+  const paymentHistory = payment?.data?.data;
   const handleOnchangePassword = async (e: any) => {
     try {
       const res = await changePass(e).unwrap();

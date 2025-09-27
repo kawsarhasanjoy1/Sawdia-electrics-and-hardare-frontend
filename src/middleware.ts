@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+
   if (pathname.startsWith("/dashboard")) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -26,12 +27,7 @@ export function middleware(request: NextRequest) {
     if (decoded?.role === "admin" && pathname.startsWith("/dashboard/admin")) {
       return NextResponse.next();
     }
-    if (
-      decoded?.role === "seller" &&
-      pathname.startsWith("/dashboard/seller")
-    ) {
-      return NextResponse.next();
-    }
+
     if (decoded?.role === "user" && pathname.startsWith("/dashboard/user")) {
       return NextResponse.next();
     }

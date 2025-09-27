@@ -9,10 +9,9 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import { TbLayoutDashboard } from "react-icons/tb";
 import { LuFileBox } from "react-icons/lu";
 import { useGetSaveFavouriteProductQuery } from "@/redux/api/productsApi";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { clearCart } from "@/redux/api/features/cartSlice";
 import { removeAllToken } from "@/utils/removeAllToken";
 const categories = [
   { name: "Electronics" },
@@ -33,14 +32,12 @@ const categories = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
   const { data: favourite } = useGetSaveFavouriteProductQuery(undefined);
   const items = useAppSelector((store) => store.cart?.items);
   const { user, token } = useAppSelector((store) => store?.auth) as any;
   const router = useRouter();
   const handleLogout = () => {
     removeAllToken();
-    dispatch(clearCart());
     toast.info("Logout successful");
     router.push("/login");
   };

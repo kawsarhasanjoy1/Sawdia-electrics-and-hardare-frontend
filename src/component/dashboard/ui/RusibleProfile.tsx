@@ -8,10 +8,6 @@ import EHInput from "@/component/Form/EHInput";
 import Modal from "./Modal";
 import { useUpdateUserMutation } from "@/redux/api/userApi";
 import { toast } from "react-toastify";
-import { removeCookies } from "@/services/action/removeCookie";
-import { store } from "@/redux/store";
-import { logOut } from "@/redux/api/features/authSlice";
-import { useRouter } from "next/navigation";
 
 type PaymentItem = {
   _id: string;
@@ -42,7 +38,6 @@ const ProfileLayout = ({
   >("profile");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updateUser] = useUpdateUserMutation();
-  const router = useRouter();
 
   const handleToUpdateProfile = async (e: any) => {
     const { avatar, ...rest } = e;
@@ -52,12 +47,7 @@ const ProfileLayout = ({
     try {
       const res = await updateUser(formData).unwrap();
       if (res.success) {
-        store.dispatch(logOut());
-        removeCookies("accessToken");
         toast.success(res?.message);
-        setTimeout(() => {
-          router.push("/login");
-        }, 100);
       }
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to update user");
@@ -187,12 +177,12 @@ const ProfileLayout = ({
                 </tr>
               </thead>
               <tbody>
-                {payments?.map((p) => (
+                {payments?.map((p: any) => (
                   <tr key={p._id}>
                     <td className="border p-2">
                       {new Date(p.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="border p-2">{p.totalAmount}</td>
+                    <td className="border p-2">{p?.subtotal}</td>
                     <td
                       className={`border p-2 font-semibold ${
                         p.status === "Paid"

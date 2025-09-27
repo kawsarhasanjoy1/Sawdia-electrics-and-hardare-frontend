@@ -5,19 +5,19 @@ import { MdLogout, MdOutlineClose } from "react-icons/md";
 import { ChevronDown } from "lucide-react";
 import SideBarItem from "@/utils/sidebar/sidebarItem";
 import { CgMenuLeftAlt } from "react-icons/cg";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {  useAppSelector } from "@/redux/hooks";
 import { FaHome } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { removeAllToken } from "@/utils/removeAllToken";
-import { clearCart } from "@/redux/api/features/cartSlice";
+
 
 const Drawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>(
     {}
   );
-  const dispatch = useAppDispatch()
+
   const { user } = useAppSelector((store) => store.auth) as any;
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -32,7 +32,6 @@ const Drawer = () => {
 
   const handleToLogout = () => {
     removeAllToken();
-    dispatch(clearCart());
     toast.info("logout successful");
     router.push("/login");
   };

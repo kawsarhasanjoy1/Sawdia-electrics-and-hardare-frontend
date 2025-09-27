@@ -36,6 +36,7 @@ const userApi = baseApi.injectEndpoints({
         method: "PATCH",
         data,
       }),
+      invalidatesTags: [tagTypes.user]
     }),
     getMe: build.query({
       query: () => {
