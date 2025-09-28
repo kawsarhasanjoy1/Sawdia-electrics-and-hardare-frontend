@@ -1,10 +1,8 @@
 "use client";
-
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-
 import EHForm from "@/component/Form/EHForm";
 import EHSelect from "@/component/Form/EHSelect";
 import { useCreateBrandMutation } from "@/redux/api/brandApi";
