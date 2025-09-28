@@ -13,6 +13,8 @@ export type TProduct = {
   rating: number;
   ratingAverage: number;
   ratingQuantity: number;
+  favouriteCount: number;
+  variants: {};
   reviews: {
     _id: string;
     userId: string;

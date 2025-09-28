@@ -1,7 +1,6 @@
 import { tagTypes } from "../tagTypes";
 import { baseApi } from "./baseApi";
 
-
 const categoryApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createCategory: build.mutation({
@@ -22,6 +21,7 @@ const categoryApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.category],
     }),
+
     deletedCategory: build.mutation({
       query: (id) => ({
         url: `category/${id}`,

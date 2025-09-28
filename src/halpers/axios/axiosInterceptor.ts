@@ -8,7 +8,7 @@ import { decodedToken } from "@/utils/decodedToken";
 const ACCESS_COOKIE = "accessToken";
 
 // base URL from env so staging/prod easy to switch
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://mazza-rastourent-backend-1.onrender.com/api/v1";
 const REFRESH_URL = `${API_BASE}/auth/refresh-token`;
 
 // cookie options

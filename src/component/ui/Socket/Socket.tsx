@@ -36,7 +36,7 @@ export const OnlineProvider = ({
     if (!userId) return;
 
     if (!socket) {
-      socket = io("https://sawdia-electrics-and-hardare-backend.onrender.com", {
+      socket = io("https://mazza-rastourent-backend-1.onrender.com", {
         withCredentials: true,
         transports: ["websocket"],
       });
