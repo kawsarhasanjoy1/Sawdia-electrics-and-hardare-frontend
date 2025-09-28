@@ -20,7 +20,6 @@ const Filtering = ({ filters, setFilters }: any) => {
   );
   const brandOptions = brandData?.data?.data || [];
 
-  // ===== Handlers =====
   const handleParentClick = (p: any) => {
     const newId = selectedParent === p._id ? "" : p._id;
     setSelectedParent(newId);
@@ -66,7 +65,7 @@ const Filtering = ({ filters, setFilters }: any) => {
   }, [selectedParent, setFilters]);
 
   return (
-    <div className="space-y-5 border-2 rounded-xl p-4">
+    <div className="space-y-5 border-1 rounded-xl p-4 overflow-y-scroll max-h-[570px] md:fixed md:top-[15%] bg-gray-400 md:w-60">
       {/* Parent Category */}
       <div>
         <p className="font-bold mb-2">Parent Category</p>

@@ -40,7 +40,7 @@ const AllCategory = () => {
         {categories.map((Item, idx) => {
           return (
             <Link
-              href={"#"}
+              href={`categories?category=${Item?.name}`}
               key={idx}
               className=" flex flex-col justify-center items-center
         "

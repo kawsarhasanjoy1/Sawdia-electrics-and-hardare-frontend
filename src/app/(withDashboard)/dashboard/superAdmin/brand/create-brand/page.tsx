@@ -4,52 +4,82 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+
 import EHForm from "@/component/Form/EHForm";
 import EHSelect from "@/component/Form/EHSelect";
 import { useCreateBrandMutation } from "@/redux/api/brandApi";
 import { useGetAllCategoryQuery } from "@/redux/api/categoryApi";
+import { useGetAllParentCategoryQuery } from "@/redux/api/parentCategoryApi";
 import { allBrands, AllCategoryName } from "@/constance/global";
 
 const BrandDefaultValue = {
-  name: "",
+  parentCategory: "",
   categoryId: "",
+  name: "",
 };
 
 const BrandForm = () => {
-  const { data: categories } = useGetAllCategoryQuery({ isDeleted: false });
   const [createBrand] = useCreateBrandMutation();
 
-  const [selectedCategory, setSelectedCategory] = useState<
+  const [selectedParentId, setSelectedParentId] = useState<string>("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [selectedCategoryName, setSelectedCategoryName] = useState<
     AllCategoryName | ""
   >("");
+
+  const { data: parentRes } = useGetAllParentCategoryQuery({
+    isDeleted: false,
+  });
+
+  const parentList = parentRes?.data?.data ?? [];
+  const parentOptions =
+    parentList?.map((p: any) => ({ label: p?.name, value: p?._id })) ?? [];
+
+  const { data: catRes, isFetching: catLoading } = useGetAllCategoryQuery(
+    { isDeleted: false, parentCategory: selectedParentId },
+    { skip: !selectedParentId }
+  );
+
+  const catList = catRes?.data?.data ?? [];
+  const categoryOptions =
+    catList.map((c: any) => ({ label: c?.name, value: c?._id })) ?? [];
+
   const [brandOptions, setBrandOptions] = useState<
     { label: string; value: string }[]
   >([]);
 
-  const categoryOptions =
-    categories?.data?.data?.map((cat: any) => ({
-      label: cat.name,
-      value: cat._id,
-    })) || [];
+  const handleParentChange = (value: string) => {
+    setSelectedParentId(value);
+    setSelectedCategoryId("");
+    setSelectedCategoryName("");
+    setBrandOptions([]);
+  };
 
   const handleCategoryChange = (value: string) => {
-    const selectedCat = categories?.data?.data?.find(
-      (cat: any) => cat._id === value
-    );
-    if (!selectedCat) return;
+    setSelectedCategoryId(value);
 
-    setSelectedCategory(selectedCat.name as AllCategoryName);
+    const selected = catList.find((c: any) => c?._id === value);
+    const catName = (selected?.name || "") as AllCategoryName;
+    setSelectedCategoryName(catName);
 
-    const brands = allBrands[selectedCat.name as AllCategoryName] || [];
-    setBrandOptions(brands.map((brand) => ({ label: brand, value: brand })));
+    const brands = allBrands[catName] || [];
+    setBrandOptions(brands.map((b) => ({ label: b, value: b })));
   };
 
   const onSubmit = async (values: FieldValues) => {
+    if (!values.parentCategory || !values.categoryId || !values.name) {
+      toast.error("Please select parent, category, and brand");
+      return;
+    }
+
     try {
-      const res = await createBrand(values).unwrap();
-      if (res.success) {
-        toast.success("Brand created successfully!");
-      }
+      const res = await createBrand({
+        categoryId: values.categoryId,
+        parentCategory: values?.parentCategory,
+        name: values.name,
+      }).unwrap();
+
+      if (res?.success) toast.success("Brand created successfully!");
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create brand");
     }
@@ -62,6 +92,7 @@ const BrandForm = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
+      {/* animated bg */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
         animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
@@ -81,19 +112,30 @@ const BrandForm = () => {
           <div className="space-y-5">
             <motion.div whileHover={{ scale: 1.02 }}>
               <EHSelect
+                name="parentCategory"
+                label="Parent Category"
+                options={parentOptions}
+                onChange={handleParentChange}
+              />
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.02 }}>
+              <EHSelect
+                key={selectedParentId || "category-empty"}
                 name="categoryId"
                 label="Category"
                 options={categoryOptions}
                 onChange={handleCategoryChange}
+                isDisabled={!selectedParentId || catLoading}
               />
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.02 }}>
               <EHSelect
+                key={selectedCategoryId || "brand-empty"}
                 name="name"
                 label="Brand"
                 options={brandOptions}
-                isDisabled={!selectedCategory}
+                isDisabled={!selectedCategoryId || brandOptions.length === 0}
               />
             </motion.div>
 
@@ -102,10 +144,13 @@ const BrandForm = () => {
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               className="relative w-full py-3 px-6 rounded-xl text-white font-semibold overflow-hidden shadow-xl"
-              disabled={!selectedCategory || brandOptions.length === 0}
+              disabled={
+                !selectedParentId ||
+                !selectedCategoryId ||
+                brandOptions.length === 0
+              }
             >
               <span className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 transition-all duration-300" />
-
               <span className="relative z-10">Create Brand</span>
             </motion.button>
           </div>

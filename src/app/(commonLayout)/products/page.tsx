@@ -6,11 +6,12 @@ import ProductCard from "@/component/Home/Products/ProductCard";
 import Filtering from "@/component/ui/filtaring/Filtaring";
 import Pagination from "@/component/ui/Paginate/Pagination";
 import { useGetAllProductQuery } from "@/redux/api/productsApi";
-import { useState, useMemo } from "react";
-
-
+import { useSearchParams } from "next/navigation";
+import { useState, useMemo, useEffect } from "react";
 
 const Products = () => {
+  const params = useSearchParams();
+  const parentC = params.get("parentCategory") as any;
   const [filters, setFilters] = useState({
     searchTerm: "",
     parentCategory: "",
@@ -19,7 +20,12 @@ const Products = () => {
     page: 1,
     limit: 15,
   });
-
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      parentCategory: parentC,
+    }));
+  }, [parentC]);
   const query = useMemo(() => ({ ...filters }), [filters]);
   const { data: productData, isFetching } = useGetAllProductQuery(query);
   const products = productData?.data?.data || [];
@@ -53,7 +59,7 @@ const Products = () => {
               <Loading fullScreen={false} text="Loading products..." />
             </div>
           ) : products?.length === 0 ? (
-            <div className="col-span-full flex justify-center items-center py-20">
+            <div className="col-span-full flex justify-center items-center py-20 w-full">
               <NotFound message="No products found." />
             </div>
           ) : (

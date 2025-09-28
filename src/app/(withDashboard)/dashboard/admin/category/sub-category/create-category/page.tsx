@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -22,8 +21,6 @@ const CategoryForm = () => {
     isDeleted: false,
   });
   const [createCategory] = useCreateCategoryMutation();
-
-  // Dynamic dropdown states
   const [selectedParent, setSelectedParent] = useState<ParentCategoryName | "">(
     ""
   );
@@ -31,14 +28,14 @@ const CategoryForm = () => {
     { label: string; value: string }[]
   >([]);
 
-  // Parent options
+
   const parentCategoryOptions =
     parentCategories?.data?.data?.map((cat: any) => ({
       label: cat.name,
       value: cat._id,
     })) || [];
 
-  // Handle Parent selection
+
   const handleParentChange = (value: string) => {
     const parent = parentCategories?.data?.data?.find(
       (cat: any) => cat._id === value

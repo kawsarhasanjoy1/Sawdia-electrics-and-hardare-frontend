@@ -12,13 +12,13 @@ const FavouriteList = () => {
     return <p className="text-center py-10">Loading favourites...</p>;
   }
 
-  if (favourite.length === 0) {
+  if (favourite?.length === 0) {
     return <p className="text-center py-10 text-gray-500">No favourites added yet ❤️</p>;
   }
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6">
-      {favourite.map((item: any) => (
+      {favourite?.map((item: any) => (
         <div
           key={item?._id}
           className="relative group rounded-xl border bg-white shadow hover:shadow-lg transition overflow-hidden"

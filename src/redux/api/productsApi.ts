@@ -1,3 +1,4 @@
+import cleanQuery from "@/utils/cleanQuery";
 import { tagTypes } from "../tagTypes";
 import { baseApi } from "./baseApi";
 
@@ -13,7 +14,8 @@ const productsApi = baseApi.injectEndpoints({
     }),
     getAllProduct: build.query({
       query: (query: any) => {
-        const params = new URLSearchParams(query).toString();
+        const cleanQry = cleanQuery(query);
+        const params = new URLSearchParams(cleanQry).toString();
 
         return {
           url: `product?${params}`,

@@ -8,8 +8,7 @@ import { decodedToken } from "@/utils/decodedToken";
 
 const ACCESS_COOKIE = "accessToken";
 const COOKIE_OPTS: any = { path: "/", sameSite: "Lax", expires: 10 as const };
-const REFRESH_URL =
-  "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/auth/refresh-token";
+const REFRESH_URL = "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/auth/refresh-token";
 
 const instance = axios.create({
   baseURL: "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/",
@@ -45,11 +44,11 @@ instance.interceptors.response.use(
     );
     if (isRefresh || original._retry || !allowRefresh)
       return Promise.reject(err);
-
     if (err.response.status === 401) {
       original._retry = true;
       const r = await axios.post(REFRESH_URL, {}, { withCredentials: true });
       const token = (r as any)?.data?.data?.accessToken as string | undefined;
+
       if (!token) return Promise.reject(err);
 
       store.dispatch(setUser({ user: decodedToken(token), token }));

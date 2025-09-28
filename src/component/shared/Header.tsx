@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { IoHomeOutline } from "react-icons/io5";
-import { FaCartPlus, FaSearch } from "react-icons/fa";
+import { FaBlogger, FaCartPlus, FaSearch } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { TbLayoutDashboard } from "react-icons/tb";
@@ -13,6 +13,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { removeAllToken } from "@/utils/removeAllToken";
+import { GiShoppingBag } from "react-icons/gi";
 const categories = [
   { name: "Electronics" },
   { name: "Mobile Accessories" },
@@ -69,6 +70,13 @@ const Navbar = () => {
             >
               {/* <LuFileBox size={25} /> */}
               Products
+            </Link>
+            <Link
+              title="Categories"
+              href="/categories"
+              className="relative text-gray-700 flex gap-1 font-bold"
+            >
+              Category
             </Link>
             <Link
               title="Blog"
@@ -131,7 +139,9 @@ const Navbar = () => {
           {categories?.map((cat: any) => (
             <div key={cat?.name} className="relative group">
               <Link
-                href={`/products?${cat?.name.toLowerCase()}`}
+                href={`/products?parentCategory=${encodeURIComponent(
+                  cat?.name
+                )}`}
                 className="text-gray-700 hover:text-blue-600 transition font-medium"
               >
                 {cat?.name}
@@ -149,14 +159,7 @@ const Navbar = () => {
               className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
               onClick={() => setOpen(false)}
             >
-              <LuFileBox size={22} /> Products
-            </Link>
-            <Link
-              href={`/dashboard/${user?.role}`}
-              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
-              onClick={() => setOpen(false)}
-            >
-              <TbLayoutDashboard size={22} /> Dashboard
+              <GiShoppingBag size={22} /> Products
             </Link>
             <Link
               href="/cart"
@@ -172,6 +175,28 @@ const Navbar = () => {
             >
               <BsBookmark size={22} /> Wishlist
             </Link>
+            <Link
+              title="Categories"
+              href="/categories"
+              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
+            >
+              <LuFileBox size={22} /> Category
+            </Link>
+            <Link
+              title="Blog"
+              href="/blog"
+              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
+            >
+              <FaBlogger size={22}/> Blogs
+            </Link>
+            <Link
+              href={`/dashboard/${user?.role}`}
+              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
+              onClick={() => setOpen(false)}
+            >
+              <TbLayoutDashboard size={22} /> Dashboard
+            </Link>
+
             {token ? (
               <button
                 onClick={() => handleLogout()}

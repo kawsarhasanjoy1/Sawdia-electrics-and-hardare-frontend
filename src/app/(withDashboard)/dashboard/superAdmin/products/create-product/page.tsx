@@ -12,12 +12,14 @@ import { motion } from "framer-motion";
 import { PackagePlus } from "lucide-react";
 import { useGetAllBrandQuery } from "@/redux/api/brandApi";
 import { useState } from "react";
+import { useGetAllParentCategoryQuery } from "@/redux/api/parentCategoryApi";
+import { optionGenerator } from "@/utils/optionGenerator";
 
 const productDefaultValue = {
   name: "",
   description: "",
-  category: "",
-  brand: "",
+  categoryId: "",
+  brandId: "",
   price: "",
   discountPrice: "",
   stock: "",
@@ -28,28 +30,21 @@ const productDefaultValue = {
 
 const ProductForm = () => {
   const [selectedCat, setSelectedCategory] = useState("");
+  const [selectedParentCat, setSelectedParentCategory] = useState("");
 
+  const { data } = useGetAllParentCategoryQuery({ isDeleted: false });
   const [createProduct, { isLoading }] = useCreateProductMutation();
-  const { data: categoryData } = useGetAllCategoryQuery({ isDeleted: false });
-
+  const { data: categoryData } = useGetAllCategoryQuery({
+    isDeleted: false,
+    parentCategory: selectedParentCat,
+  });
   const { data: brands } = useGetAllBrandQuery({
     categoryId: selectedCat,
   });
 
+  const parentCategories = data?.data?.data;
   const brand = brands?.data?.data || [];
 
-  const brandOptions = brand?.map((item: Record<string, any>) => ({
-    label: item?.name,
-    value: item?._id,
-  }));
-
-  const categoryArray =
-    categoryData?.data?.data?.map((item: any) => ({
-      value: item?._id,
-      label: item?.name,
-    })) || [];
-
-  // FIXED PART
   const handleCategory = (option: any) => {
     setSelectedCategory(option || "");
   };
@@ -67,10 +62,10 @@ const ProductForm = () => {
 
       const res: any = await createProduct(formData).unwrap();
       if (res?.success) {
-        toast.success("✅ Product created successfully!");
+        toast.success(" Product created successfully!");
       }
     } catch (err: any) {
-      toast.error(err?.data?.message || "❌ Something went wrong");
+      toast.error(err?.data?.message || " Something went wrong");
     }
   };
 
@@ -114,26 +109,31 @@ const ProductForm = () => {
             <EHInput type="text" name="warranty" label="Warranty" />
 
             <EHSelect
+              onChange={(e) => setSelectedParentCategory(e)}
+              options={optionGenerator(parentCategories)}
+              label="Parent Category"
+              name="parentCategory"
+            />
+            <EHSelect
               onChange={handleCategory}
-              options={categoryArray}
+              isDisabled={!selectedParentCat}
+              options={optionGenerator(categoryData?.data?.data)}
               label="Category"
               name="categoryId"
             />
 
             <EHSelect
               isDisabled={!selectedCat}
-              options={brandOptions}
+              options={optionGenerator(brand)}
               label="Brands"
               name="brandId"
             />
           </div>
 
-          {/* Image Upload */}
           <div className="mt-6">
             <EHImageUploader name="images" />
           </div>
 
-          {/* Description */}
           <div className="mt-6">
             <EHTextarea
               label="Description"
@@ -144,7 +144,6 @@ const ProductForm = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
