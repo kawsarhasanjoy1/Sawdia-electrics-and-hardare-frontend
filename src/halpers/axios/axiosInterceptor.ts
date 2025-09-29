@@ -7,13 +7,11 @@ import { decodedToken } from "@/utils/decodedToken";
 
 const ACCESS_COOKIE = "accessToken";
 
-// base URL from env so staging/prod easy to switch
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1";
 const REFRESH_URL = `${API_BASE}/auth/refresh-token`;
 
-// cookie options
 const isProd = process.env.NODE_ENV === "production";
-const isCrossSite = true; // true if frontend+backend on different origins
+const isCrossSite = true; 
 const COOKIE_OPTS: Cookies.CookieAttributes = isCrossSite
   ? { path: "/", sameSite: "none", secure: true, expires: 365 }
   : { path: "/", sameSite: "lax", secure: isProd, expires: 365 };
@@ -23,7 +21,7 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-// ---------- refresh queue ----------
+
 let allowRefresh = true;
 export const disableRefresh = () => { allowRefresh = false; };
 export const enableRefresh = () => { allowRefresh = true; };
@@ -45,12 +43,11 @@ const runRefreshOnce = () => {
   return refreshInFlight;
 };
 
-// ---------- request interceptor ----------
+
 instance.interceptors.request.use((config: any) => {
   const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
   if (token) {
     config.headers = config.headers ?? {};
-    // send raw token, no Bearer
     config.headers.Authorization = token;
   }
 
@@ -63,7 +60,7 @@ instance.interceptors.request.use((config: any) => {
   return config;
 });
 
-// ---------- response interceptor ----------
+
 instance.interceptors.response.use(
   (res) => res,
   async (err: AxiosError) => {

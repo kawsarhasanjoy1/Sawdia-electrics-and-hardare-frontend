@@ -169,11 +169,11 @@ const Navbar = () => {
               <FaCartPlus size={22} /> Cart
             </Link>
             <Link
-              href="/wishlist"
+              href="/favourite"
               className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
               onClick={() => setOpen(false)}
             >
-              <BsBookmark size={22} /> Wishlist
+              <BsBookmark size={22} /> Favourite
             </Link>
             <Link
               title="Categories"
