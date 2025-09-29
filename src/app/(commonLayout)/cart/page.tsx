@@ -90,7 +90,6 @@ const CartPage = () => {
         toast.error("payment url not found");
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.data?.message || "Payment failed");
     }
   };

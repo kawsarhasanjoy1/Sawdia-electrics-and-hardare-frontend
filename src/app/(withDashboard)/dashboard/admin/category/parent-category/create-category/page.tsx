@@ -25,7 +25,6 @@ const ParentCategoryForm = () => {
     })) || [];
 
   const onSubmit = async (values: FieldValues) => {
-    console.log(values);
     try {
       const res = await createParentCategory(values).unwrap();
       if (res.success) {

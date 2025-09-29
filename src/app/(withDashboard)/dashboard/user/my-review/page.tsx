@@ -36,7 +36,6 @@ const MyReviewPage = () => {
       key: "Image",
       header: "Image",
       render: (row: any) => {
-        console.log(row);
         return (
           <Image
             className=" md:h-16 h-10 md:w-16 w-10 rounded-full "

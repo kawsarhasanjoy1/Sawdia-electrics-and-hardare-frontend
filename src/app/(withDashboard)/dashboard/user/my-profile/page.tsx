@@ -11,9 +11,7 @@ const UserProfilePage = () => {
   const { data } = useGetMeQuery(undefined);
   const user = data?.data || {};
   const paymentHistory = payment?.data;
-  // const handleProfileImage = (e: any) => {
-  //   console.log(e);
-  // };
+
 
   const handleOnchangePassword = async (e: any) => {
     try {

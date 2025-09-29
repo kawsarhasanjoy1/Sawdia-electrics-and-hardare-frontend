@@ -49,7 +49,6 @@ const CategoryForm = () => {
   };
 
   const onSubmit = async (values: FieldValues) => {
-    console.log(values);
     try {
       const res = await createCategory(values).unwrap();
       if (res.success) {

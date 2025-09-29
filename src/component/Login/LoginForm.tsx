@@ -18,7 +18,6 @@ export const LoginForm = () => {
   const handleSubmit = async (data: FieldValues) => {
     try {
       const res = await loginUser(data).unwrap();
-      console.log(res);
       const token = res?.data?.accessToken;
       if (res?.success) {
         handleLoginSuccess(dispatch, token);
@@ -27,7 +26,6 @@ export const LoginForm = () => {
         router.push("/");
       }
     } catch (err: any) {
-      console.log(err);
       toast.error(err?.data?.message);
     }
   };

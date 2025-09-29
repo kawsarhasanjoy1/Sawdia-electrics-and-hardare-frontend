@@ -46,7 +46,7 @@ const Navbar = () => {
     <header className="w-full bg-white shadow-md sticky top-0 z-50 max-w-screen mx-auto overflow-x-hidden overflow-y-hidden">
       <div className=" hidden md:block ">
         <div className=" flex justify-between px-10 py-3">
-          <Link href={'/'} className="text-2xl font-bold text-blue-600">
+          <Link href={"/"} className="text-2xl font-bold text-blue-600">
             Sawdia Electronics
           </Link>
           <div className="flex w-full max-w-md mx-auto rounded-md border border-gray-200">
@@ -93,22 +93,23 @@ const Navbar = () => {
               <TbLayoutDashboard size={25} />
             </Link>
 
-            <Link href="/cart" className="relative text-gray-700">
-              <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
-                {items?.length ? items?.length : 0}
-              </p>
-              <FaCartPlus size={25} />
-            </Link>
-
-            {user && user?.role === "user" ? (
-              <Link href="/favourite" className="relative text-gray-700">
-                <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
-                  {favourite?.data?.length ? favourite?.data?.length : 0}
-                </p>
-                <BsBookmark size={25} />
-              </Link>
+            {user && user?.role === "superAdmin" || user?.role == 'admin' ? (
+             ''
             ) : (
-              ""
+               <div className=" flex gap-5">
+                <Link href="/cart" className="relative text-gray-700">
+                  <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
+                    {items?.length ? items?.length : 0}
+                  </p>
+                  <FaCartPlus size={25} />
+                </Link>
+                <Link href="/favourite" className="relative text-gray-700">
+                  <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
+                    {favourite?.data?.length ? favourite?.data?.length : 0}
+                  </p>
+                  <BsBookmark size={25} />
+                </Link>
+              </div>
             )}
             {token ? (
               <button
@@ -161,20 +162,27 @@ const Navbar = () => {
             >
               <GiShoppingBag size={22} /> Products
             </Link>
-            <Link
-              href="/cart"
-              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
-              onClick={() => setOpen(false)}
-            >
-              <FaCartPlus size={22} /> Cart
-            </Link>
-            <Link
-              href="/favourite"
-              className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
-              onClick={() => setOpen(false)}
-            >
-              <BsBookmark size={22} /> Favourite
-            </Link>
+
+            {(user && user?.role == "superAdmin") || user?.role == "admin" ? (
+              ""
+            ) : (
+              <div>
+                <Link
+                  href="/cart"
+                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
+                  onClick={() => setOpen(false)}
+                >
+                  <FaCartPlus size={22} /> Cart
+                </Link>
+                <Link
+                  href="/favourite"
+                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
+                  onClick={() => setOpen(false)}
+                >
+                  <BsBookmark size={22} /> Favourite
+                </Link>
+              </div>
+            )}
             <Link
               title="Categories"
               href="/categories"
@@ -187,7 +195,7 @@ const Navbar = () => {
               href="/blog"
               className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition px-2 py-1"
             >
-              <FaBlogger size={22}/> Blogs
+              <FaBlogger size={22} /> Blogs
             </Link>
             <Link
               href={`/dashboard/${user?.role}`}

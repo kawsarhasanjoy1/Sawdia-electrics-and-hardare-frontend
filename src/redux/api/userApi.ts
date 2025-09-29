@@ -12,7 +12,7 @@ const userApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.user],
     }),
     createAdmin: build.mutation({
-      query: (data) => (console.log(data),{
+      query: (data) => ({
         url: "user/create-admin",
         method: "POST",
         data,
@@ -36,7 +36,7 @@ const userApi = baseApi.injectEndpoints({
         method: "PATCH",
         data,
       }),
-      invalidatesTags: [tagTypes.user]
+      invalidatesTags: [tagTypes.user],
     }),
     getMe: build.query({
       query: () => {

@@ -98,7 +98,7 @@ const ProfileLayout = ({
             <Image
               width={200}
               height={200}
-              src={user?.avatar || "/default-avatar.png"}
+            src={user?.avatar || "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"}
               alt="Avatar"
               className="w-24 h-24 object-cover object-center rounded-full border"
             />
