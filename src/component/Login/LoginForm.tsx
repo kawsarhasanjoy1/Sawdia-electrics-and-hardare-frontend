@@ -54,6 +54,7 @@ export const LoginForm = () => {
                 label="Password"
                 placeholder="Please enter your password"
               />
+              <Link className=" hover:text-blue-500 transition-all duration-100" href={'auth/forget-password'}>Forget Password</Link>
             </div>
 
             <button

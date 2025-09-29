@@ -145,6 +145,7 @@ const ProfileLayout = ({
               label="Old Password"
               name="oldPassword"
               type="password"
+              
             />
             <EHInput
               required
