@@ -46,9 +46,9 @@ const Navbar = () => {
     <header className="w-full bg-white shadow-md sticky top-0 z-50 max-w-screen mx-auto overflow-x-hidden overflow-y-hidden">
       <div className=" hidden md:block ">
         <div className=" flex justify-between px-10 py-3">
-          <h1 className="text-2xl font-bold text-blue-600">
+          <Link href={'/'} className="text-2xl font-bold text-blue-600">
             Sawdia Electronics
-          </h1>
+          </Link>
           <div className="flex w-full max-w-md mx-auto rounded-md border border-gray-200">
             <input
               type="text"
