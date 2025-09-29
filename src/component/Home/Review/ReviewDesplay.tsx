@@ -1,10 +1,9 @@
 "use client";
-
-import React from "react";
 import { Rating as ReactRating } from "@smastrom/react-rating";
 import Image from "next/image";
 
 const ReviewDisplay = ({ product }: any) => {
+
   return (
     <div className="space-y-6">
       {product?.reviews?.length > 0 ? (
@@ -17,7 +16,7 @@ const ReviewDisplay = ({ product }: any) => {
             {/* User Avatar */}
             <div className="flex-shrink-0">
               <Image
-                src={rev?.userId?.image || "/default-avatar.png"}
+                src={rev?.userId?.image || "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg"}
                 alt={rev?.userId?.name || "User"}
                 width={60}
                 height={60}

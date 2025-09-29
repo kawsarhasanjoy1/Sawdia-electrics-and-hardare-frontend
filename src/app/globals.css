@@ -4,19 +4,48 @@
 
 
 :root {
-  --bg-color: #ededed;    
-  --text-color: #000000;  
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #0f172a; 
+  --muted: #475569; 
+  --border: #e2e8f0; 
+  --link: #2563eb;   
 }
-
 
 html, body {
-  width: 100%;
-  height: 100%;
+  background: var(--bg) !important;
+  color: var(--fg) !important;
+  min-height: 100%;
   margin: 0;
   padding: 0;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
-  line-height: 1.6;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+html.dark, .dark {
+  background: var(--bg) !important;
+  color: var(--fg) !important;
+  color-scheme: light !important;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+  html, body {
+    background: var(--bg) !important;
+    color: var(--fg) !important;
+  }
+}
+
+
+
+
+::selection {
+  background: #e5edff;
+  color: var(--fg);
+}
+
 

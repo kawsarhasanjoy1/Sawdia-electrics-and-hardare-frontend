@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { useDispatch } from "react-redux";
@@ -72,8 +71,8 @@ const CartPage = () => {
         name: item?.name,
         quantity: item.quantity,
         price: item?.price,
+        variants: item?.variants,
       }));
-
       const res = await addPayment({
         userId,
         products,

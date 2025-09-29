@@ -27,7 +27,7 @@ const Products = () => {
     }));
   }, [parentC]);
   const query = useMemo(() => ({ ...filters }), [filters]);
-  const { data: productData, isFetching } = useGetAllProductQuery(query);
+  const { data: productData, isLoading } = useGetAllProductQuery(query);
   const products = productData?.data?.data || [];
   const meta = productData?.data?.meta;
   const totalPages = meta?.totalPage || 1;
@@ -54,7 +54,7 @@ const Products = () => {
         </div>
 
         <div className="col-span-12 md:col-span-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
-          {isFetching ? (
+          {isLoading ? (
             <div className="col-span-full h-full flex justify-center items-center py-20">
               <Loading fullScreen={false} text="Loading products..." />
             </div>

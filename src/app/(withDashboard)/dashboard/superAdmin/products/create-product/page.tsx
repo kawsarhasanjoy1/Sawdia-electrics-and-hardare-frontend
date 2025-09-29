@@ -11,14 +11,12 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { PackagePlus } from "lucide-react";
 import { useGetAllBrandQuery } from "@/redux/api/brandApi";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { optionGenerator } from "@/utils/optionGenerator";
 import { useGetAllParentCategoryQuery } from "@/redux/api/parentCategoryApi";
 import VariantFields from "@/utils/varientFields";
 
-/** ---------------------------
- * Default form values
- * --------------------------*/
+
 const productDefaultValue = {
   name: "",
   description: "",
@@ -29,18 +27,14 @@ const productDefaultValue = {
   sku: "",
   warranty: "",
 
-  // relations
-  parentCategoryId: "",
-  categoryId: "", // = subCategoryId
-  brandId: "",
 
-  // variants
+  parentCategoryId: "",
+  categoryId: "",
+  brandId: "",
   variants: {} as Record<string, any>,
 };
 
-/** ---------------------------
- * Product Form Component
- * --------------------------*/
+
 const ProductForm = () => {
   const [parentCatId, setParentCatId] = useState<string>("");
   const [subCatId, setSubCatId] = useState<string>("");
@@ -68,7 +62,6 @@ const ProductForm = () => {
   const brandList = brands?.data?.data || [];
 
   const handleSubmit = async (data: FieldValues) => {
-    console.log(data);
     try {
       const formData = new FormData();
       if (data.images && data.images.length > 0) {
@@ -115,7 +108,6 @@ const ProductForm = () => {
           </p>
         </div>
 
-        {/* Form */}
         <EHForm defaultValues={productDefaultValue} onsubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <EHInput type="text" name="name" label="Product Name" />
@@ -151,7 +143,7 @@ const ProductForm = () => {
             />
           </div>
 
-          {/* ✅ Variant (Top-4, model ছাড়া) */}
+  
           <div className="mt-8">
             <h4 className="text-lg font-semibold mb-3 text-indigo-700 dark:text-indigo-300">
               Variant (Top 4)
@@ -159,12 +151,10 @@ const ProductForm = () => {
             <VariantFields subCategoryName={subCatName?.name} />
           </div>
 
-          {/* Images */}
           <div className="mt-6">
             <EHImageUploader name="images" />
           </div>
 
-          {/* Description */}
           <div className="mt-6">
             <EHTextarea
               label="Description"
@@ -175,7 +165,6 @@ const ProductForm = () => {
             />
           </div>
 
-          {/* Submit */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

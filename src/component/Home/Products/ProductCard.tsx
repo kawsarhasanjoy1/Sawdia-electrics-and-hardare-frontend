@@ -51,6 +51,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
           : product?.price,
         images: product.images,
         quantity: 1,
+        variants: product?.variants,
       })
     );
     toast.success(`${product.name} added to cart!`);

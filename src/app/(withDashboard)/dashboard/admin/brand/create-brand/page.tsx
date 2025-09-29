@@ -1,8 +1,10 @@
 "use client";
+
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+
 import EHForm from "@/component/Form/EHForm";
 import EHSelect from "@/component/Form/EHSelect";
 import { useCreateBrandMutation } from "@/redux/api/brandApi";
@@ -21,9 +23,7 @@ const BrandForm = () => {
 
   const [selectedParentId, setSelectedParentId] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const [selectedCategoryName, setSelectedCategoryName] = useState<
-    AllCategoryName | ""
-  >("");
+
 
   const { data: parentRes } = useGetAllParentCategoryQuery({
     isDeleted: false,
@@ -49,7 +49,6 @@ const BrandForm = () => {
   const handleParentChange = (value: string) => {
     setSelectedParentId(value);
     setSelectedCategoryId("");
-    setSelectedCategoryName("");
     setBrandOptions([]);
   };
 
@@ -58,7 +57,7 @@ const BrandForm = () => {
 
     const selected = catList.find((c: any) => c?._id === value);
     const catName = (selected?.name || "") as AllCategoryName;
-    setSelectedCategoryName(catName);
+  
 
     const brands = allBrands[catName] || [];
     setBrandOptions(brands.map((b) => ({ label: b, value: b })));
@@ -73,6 +72,7 @@ const BrandForm = () => {
     try {
       const res = await createBrand({
         categoryId: values.categoryId,
+        parentCategory: values?.parentCategory,
         name: values.name,
       }).unwrap();
 

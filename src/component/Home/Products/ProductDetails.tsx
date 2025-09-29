@@ -6,16 +6,17 @@ import { motion } from "framer-motion";
 import { Rating as ReactRating } from "@smastrom/react-rating";
 import { toast } from "react-toastify";
 import { Share2, Heart, Copy } from "lucide-react";
-
 import ReviewDisplay from "../Review/ReviewDesplay";
 import ReviewForm from "../Review/ReviewForm";
-
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/api/features/cartSlice";
 import { useGetCouponsQuery } from "@/redux/api/couponApi";
 import type { TProduct } from "@/interface/global";
 import { Delivared } from "./Delivared";
-import { useGetSaveFavouriteProductQuery, useSaveFavouriteProductMutation } from "@/redux/api/productsApi";
+import {
+  useGetSaveFavouriteProductQuery,
+  useSaveFavouriteProductMutation,
+} from "@/redux/api/productsApi";
 
 type ProductDetailsProps = {
   product: TProduct;
@@ -53,19 +54,16 @@ const VariantChip: React.FC<{ k: string; v: any }> = ({ k, v }) => {
   );
 };
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({
-  product,
-  onToggleFavorite,
-}) => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
   const dispatch = useAppDispatch();
-const [saveProduct] = useSaveFavouriteProductMutation();
- const { data } = useGetSaveFavouriteProductQuery(undefined);
-   const favourite = data?.data || [];
-   const isFavourite = favourite?.some(
-     (item: any) => item?.productId?._id === product?._id
-   );
+  const [saveProduct] = useSaveFavouriteProductMutation();
+  const { data } = useGetSaveFavouriteProductQuery(undefined);
+  const favourite = data?.data || [];
+  const isFavourite = favourite?.some(
+    (item: any) => item?.productId?._id === product?._id
+  );
 
-    const handleTofavourite = async (id: string) => {
+  const handleTofavourite = async (id: string) => {
     try {
       const res = await saveProduct(id).unwrap();
       if (res?.success) {
@@ -75,7 +73,6 @@ const [saveProduct] = useSaveFavouriteProductMutation();
       toast.error(err?.data?.message);
     }
   };
-
 
   const { data: CouponData } = useGetCouponsQuery({ isActive: true, limit: 1 });
   const coupons = CouponData?.data?.data;
@@ -88,11 +85,6 @@ const [saveProduct] = useSaveFavouriteProductMutation();
 
   const [currentImage, setCurrentImage] = React.useState(0);
   const [qty, setQty] = React.useState(1);
-  const [fav, setFav] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    setFav(Boolean(product?.favouriteCount && product.favouriteCount > 0));
-  }, [product?.favouriteCount]);
 
   const handleAddToCart = (p: TProduct) => {
     const priceToUse = activeCoupon
@@ -108,17 +100,21 @@ const [saveProduct] = useSaveFavouriteProductMutation();
         price: priceToUse,
         images: p.images,
         quantity: qty,
+        variants: p?.variants,
       })
     );
     toast.success(`${p.name} added to cart`);
   };
 
- 
   const handleShare = async () => {
     try {
       const url = window.location.href;
       if (navigator.share) {
-        await navigator.share({ title: product.name, text: product.description, url });
+        await navigator.share({
+          title: product.name,
+          text: product.description,
+          url,
+        });
       } else {
         await navigator.clipboard.writeText(url);
         toast.success("Link copied!");
@@ -150,7 +146,9 @@ const [saveProduct] = useSaveFavouriteProductMutation();
   const brandName =
     (product as any)?.brandId?.name || (product as any)?.brand?.name || "-";
   const parentCatName =
-    (product as any)?.parentCategory?.name || (product as any)?.parentCategoryName || "-";
+    (product as any)?.parentCategory?.name ||
+    (product as any)?.parentCategoryName ||
+    "-";
   const subCatName =
     (product as any)?.categoryId?.name || (product as any)?.categoryName || "-";
 
@@ -194,7 +192,9 @@ const [saveProduct] = useSaveFavouriteProductMutation();
               <button
                 onClick={() => handleTofavourite(product?._id)}
                 className={`rounded-full p-2 shadow-md transition cursor-pointer ${
-                  isFavourite ? "bg-rose-500 text-white" : "bg-white/90 text-zinc-700"
+                  isFavourite
+                    ? "bg-rose-500 text-white"
+                    : "bg-white/90 text-zinc-700"
                 }`}
                 title="Wishlist"
               >
@@ -223,7 +223,12 @@ const [saveProduct] = useSaveFavouriteProductMutation();
                 }`}
                 title={`Image ${idx + 1}`}
               >
-                <Image src={img} alt={`thumb-${idx}`} fill className="object-cover" />
+                <Image
+                  src={img}
+                  alt={`thumb-${idx}`}
+                  fill
+                  className="object-cover"
+                />
               </button>
             ))}
           </div>
@@ -251,13 +256,20 @@ const [saveProduct] = useSaveFavouriteProductMutation();
             ) : null}
           </div>
 
-          <p className="text-zinc-600 dark:text-zinc-300">{product?.description}</p>
+          <p className="text-zinc-600 dark:text-zinc-300">
+            {product?.description}
+          </p>
 
           {/* Rating */}
           <div className="flex items-center gap-3">
-            <ReactRating style={{ maxWidth: 120 }} value={product?.ratingAverage || 0} readOnly />
+            <ReactRating
+              style={{ maxWidth: 120 }}
+              value={product?.ratingAverage || 0}
+              readOnly
+            />
             <span className="text-sm text-zinc-500">
-              {product?.ratingAverage?.toFixed(1) ?? "0.0"} • {product?.ratingQuantity || 0} reviews
+              {product?.ratingAverage?.toFixed(1) ?? "0.0"} •{" "}
+              {product?.ratingQuantity || 0} reviews
             </span>
           </div>
 
@@ -291,7 +303,6 @@ const [saveProduct] = useSaveFavouriteProductMutation();
             ) : null}
           </div>
 
-      
           {Object.keys(variants).length > 0 ? (
             <div className="space-y-2">
               <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
@@ -305,7 +316,6 @@ const [saveProduct] = useSaveFavouriteProductMutation();
             </div>
           ) : null}
 
-       
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="flex h-10 items-center overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-700">
               <button
@@ -342,8 +352,7 @@ const [saveProduct] = useSaveFavouriteProductMutation();
             </button>
           </div>
 
-        <Delivared/>
-          
+          <Delivared />
         </motion.div>
       </div>
 

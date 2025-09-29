@@ -17,7 +17,7 @@ const BlogDefaultValue = {
 };
 
 const BlogForm = () => {
-  const [createBlog] = useCreateBlogMutation();
+  const [createBlog, {isLoading}] = useCreateBlogMutation();
 
   const onSubmit = async (values: FieldValues) => {
     const formData = new FormData();
@@ -80,12 +80,13 @@ const BlogForm = () => {
             </motion.div>
             <motion.button
               type="submit"
+              disabled={isLoading}
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
-              className="relative w-full py-3 px-6 rounded-xl text-white font-semibold overflow-hidden shadow-xl"
+              className={`relative w-full py-3 px-6 rounded-xl text-white font-semibold overflow-hidden shadow-xl ${isLoading ? "" : "cursor-pointer"}`}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 transition-all duration-300" />
-              <span className="relative z-10">Create Blog</span>
+              <span className="relative z-10">{isLoading ? 'creating...' : 'Create Blog'}</span>
             </motion.button>
           </div>
         </EHForm>

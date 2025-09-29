@@ -23,9 +23,7 @@ const BrandForm = () => {
 
   const [selectedParentId, setSelectedParentId] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const [selectedCategoryName, setSelectedCategoryName] = useState<
-    AllCategoryName | ""
-  >("");
+
 
   const { data: parentRes } = useGetAllParentCategoryQuery({
     isDeleted: false,
@@ -51,7 +49,6 @@ const BrandForm = () => {
   const handleParentChange = (value: string) => {
     setSelectedParentId(value);
     setSelectedCategoryId("");
-    setSelectedCategoryName("");
     setBrandOptions([]);
   };
 
@@ -60,7 +57,7 @@ const BrandForm = () => {
 
     const selected = catList.find((c: any) => c?._id === value);
     const catName = (selected?.name || "") as AllCategoryName;
-    setSelectedCategoryName(catName);
+  
 
     const brands = allBrands[catName] || [];
     setBrandOptions(brands.map((b) => ({ label: b, value: b })));

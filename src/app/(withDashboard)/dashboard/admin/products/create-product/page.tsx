@@ -12,47 +12,54 @@ import { motion } from "framer-motion";
 import { PackagePlus } from "lucide-react";
 import { useGetAllBrandQuery } from "@/redux/api/brandApi";
 import { useState } from "react";
+import { optionGenerator } from "@/utils/optionGenerator";
+import { useGetAllParentCategoryQuery } from "@/redux/api/parentCategoryApi";
+import VariantFields from "@/utils/varientFields";
+
 
 const productDefaultValue = {
   name: "",
   description: "",
-  category: "",
-  brand: "",
   price: "",
   discountPrice: "",
   stock: "",
-  images: [],
+  images: [] as File[] | any,
   sku: "",
   warranty: "",
+
+
+  parentCategoryId: "",
+  categoryId: "",
+  brandId: "",
+  variants: {} as Record<string, any>,
 };
 
-const ProductForm = () => {
-  const [selectedCat, setSelectedCategory] = useState("");
 
+const ProductForm = () => {
+  const [parentCatId, setParentCatId] = useState<string>("");
+  const [subCatId, setSubCatId] = useState<string>("");
+  const subCatName: Record<string, any> = {};
   const [createProduct, { isLoading }] = useCreateProductMutation();
-  const { data: categoryData } = useGetAllCategoryQuery({ isDeleted: false });
-  console.log(categoryData);
-  const { data: brands } = useGetAllBrandQuery({
-    categoryId: selectedCat,
+  const { data: categoryData } = useGetAllCategoryQuery({
+    isDeleted: false,
+    parentCategory: parentCatId,
+  });
+  const findSubCatName = categoryData?.data?.data?.find(
+    (item: any) => item?._id == subCatId
+  );
+  if (findSubCatName) {
+    subCatName["name"] = findSubCatName?.name;
+  }
+
+  const { data: parentCategoryData } = useGetAllParentCategoryQuery({
+    isDeleted: false,
   });
 
-  const brand = brands?.data?.data || [];
-
-  const brandOptions = brand?.map((item: Record<string, any>) => ({
-    label: item?.name,
-    value: item?._id,
-  }));
-
-  const categoryArray =
-    categoryData?.data?.data?.map((item: any) => ({
-      value: item?._id,
-      label: item?.name,
-    })) || [];
-
-  // FIXED PART
-  const handleCategory = (option: any) => {
-    setSelectedCategory(option || "");
-  };
+  const { data: brands } = useGetAllBrandQuery(
+    { categoryId: subCatId },
+    { skip: !subCatId }
+  );
+  const brandList = brands?.data?.data || [];
 
   const handleSubmit = async (data: FieldValues) => {
     try {
@@ -62,9 +69,12 @@ const ProductForm = () => {
           formData.append("files", file);
         });
       }
-      const { ...rest } = data;
-      formData.append("data", JSON.stringify(rest));
-
+      const payload = {
+        ...data,
+        parentCategory: parentCatId,
+        categoryId: subCatId,
+      };
+      formData.append("data", JSON.stringify(payload));
       const res: any = await createProduct(formData).unwrap();
       if (res?.success) {
         toast.success("✅ Product created successfully!");
@@ -98,7 +108,6 @@ const ProductForm = () => {
           </p>
         </div>
 
-        {/* Form */}
         <EHForm defaultValues={productDefaultValue} onsubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <EHInput type="text" name="name" label="Product Name" />
@@ -108,31 +117,44 @@ const ProductForm = () => {
               type="number"
               name="discountPrice"
               label="Discount Price"
+              required={false}
             />
             <EHInput type="number" name="stock" label="Stock" />
             <EHInput type="text" name="warranty" label="Warranty" />
-
             <EHSelect
-              onChange={handleCategory}
-              options={categoryArray}
-              label="Category"
-              name="categoryId"
+              onChange={(e) => setParentCatId(e)}
+              options={optionGenerator(parentCategoryData?.data?.data)}
+              label="Parent Category"
+              name="parentCategory"
             />
 
             <EHSelect
-              isDisabled={!selectedCat}
-              options={brandOptions}
+              onChange={(e) => setSubCatId(e)}
+              isDisabled={!parentCatId}
+              options={optionGenerator(categoryData?.data?.data)}
+              label="Sub Category"
+              name="categoryId"
+            />
+            <EHSelect
+              isDisabled={!subCatId}
+              options={optionGenerator(brandList)}
               label="Brands"
               name="brandId"
             />
           </div>
 
-          {/* Image Upload */}
+  
+          <div className="mt-8">
+            <h4 className="text-lg font-semibold mb-3 text-indigo-700 dark:text-indigo-300">
+              Variant (Top 4)
+            </h4>
+            <VariantFields subCategoryName={subCatName?.name} />
+          </div>
+
           <div className="mt-6">
             <EHImageUploader name="images" />
           </div>
 
-          {/* Description */}
           <div className="mt-6">
             <EHTextarea
               label="Description"
@@ -143,7 +165,6 @@ const ProductForm = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

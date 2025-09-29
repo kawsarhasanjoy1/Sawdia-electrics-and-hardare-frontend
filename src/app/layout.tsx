@@ -1,9 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono,  } from "next/font/google";
 import "./globals.css";
 import Providers from "@/libs/Provider";
 import { ToastContainer } from "react-toastify";
 import { generateMetadata } from "@/utils/ganeratedMeta";
 import "@smastrom/react-rating/style.css";
+
 
 export const metadata = generateMetadata({
   title: "Sawdia Electrics & Hardware",

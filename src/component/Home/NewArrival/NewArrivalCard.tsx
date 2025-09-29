@@ -38,6 +38,7 @@ const NewArrivalCard = ({ product }: { product: Record<string, any> }) => {
           : product?.price,
         images: product.images,
         quantity: 1,
+        variants: product?.variants,
       })
     );
     toast.success(`${product.name} added to cart!`);

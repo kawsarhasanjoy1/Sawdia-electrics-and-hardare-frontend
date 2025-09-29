@@ -20,7 +20,7 @@ const BlogTable = () => {
     page: 1,
     limit: 10,
   });
-  const { data, isFetching } = useGetBlogQuery(filters);
+  const { data, isLoading: blogLoading } = useGetBlogQuery(filters);
   const [softDelete] = useDeleteBlogMutation();
   const [restoreBlog] = useRestoreBrandMutation();
   const [togglePublish, { isLoading }] = useTogglePublishMutation();
@@ -147,7 +147,7 @@ const BlogTable = () => {
           }
         />
       </div>
-      {isFetching ? (
+      {blogLoading ? (
         <Loading />
       ) : data?.data?.data?.length > 0 ? (
         <ReusableTable columns={columns} data={data?.data?.data || []} />

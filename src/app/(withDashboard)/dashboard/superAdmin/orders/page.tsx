@@ -155,7 +155,7 @@ const OrdersPage = () => {
   }
 
   return (
-    <div className="bg-gray-50 p-6">
+    <div className="bg-gray-50 p-6 space-y-10">
       <div className=" flex justify-between">
         <h1 className="text-2xl font-bold mb-4">Order History</h1>
         <SearchBox
