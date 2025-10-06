@@ -6,9 +6,9 @@ import ReusableTable from "@/component/dashboard/ui/ReusableTable";
 import {
   useDeleteBlogMutation,
   useGetBlogQuery,
+  useRestoreBlogMutation,
   useTogglePublishMutation,
 } from "@/redux/api/blogApi";
-import { useRestoreBrandMutation } from "@/redux/api/brandApi";
 import NotFound from "@/app/not-found";
 import SearchBox from "@/component/dashboard/ui/SearchInput";
 import { useState } from "react";
@@ -22,7 +22,7 @@ const BlogTable = () => {
   });
   const { data, isLoading: blogLoading } = useGetBlogQuery(filters);
   const [softDelete] = useDeleteBlogMutation();
-  const [restoreBlog] = useRestoreBrandMutation();
+  const [restoreBlog] = useRestoreBlogMutation();
   const [togglePublish, { isLoading }] = useTogglePublishMutation();
 
   const handleToDeleted = async (id: string) => {
@@ -134,7 +134,7 @@ const BlogTable = () => {
   return (
     <div className="p-6 shadow-xl rounded-2xl bg-white">
       <div className="  mb-6 text-gray-800 flex justify-between items-center gap-6 md:gap-0 pt-6">
-        <p className="text-2xl font-bold">{"Products"}</p>
+        <p className="text-2xl font-bold">{"Blogs"}</p>
         <SearchBox
           placeholder="Search blog"
           className="md:w-3/12 w-full border px-4 py-2 border-gray-400 focus:outline-none rounded-md"

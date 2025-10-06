@@ -24,7 +24,7 @@ const ParentCategoryTable = () => {
   });
 
   const query = useMemo(() => ({ ...filters }), [filters]);
-  const { data, isFetching } = useGetAllParentCategoryQuery(query);
+  const { data, isLoading } = useGetAllParentCategoryQuery(query);
   const categories = data?.data?.data || [];
 
   const [softDelete] = useDeleteParentCategoryMutation();
@@ -131,7 +131,7 @@ const ParentCategoryTable = () => {
         />
       </div>
 
-      {isFetching ? (
+      {isLoading ? (
         <Loading />
       ) : categories?.length > 0 ? (
         <ReusableTable columns={columns} data={categories} />

@@ -55,7 +55,7 @@ const ProfileLayout = ({
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="md:max-w-5xl w-full mx-auto md:p-6 p-0">
       <h1 className="text-3xl font-bold mb-6">My Profile</h1>
 
       <div className="flex flex-wrap gap-4 mb-6">
@@ -93,19 +93,19 @@ const ProfileLayout = ({
 
       {/* Profile */}
       {activeTab === "profile" && (
-        <div className="bg-white shadow rounded-lg p-6 space-y-6">
-          <div className="flex items-center gap-6">
+        <div className="bg-white shadow rounded-lg md:p-6 p-4 space-y-6 w-full">
+          <div className="flex items-center md:gap-6 gap-2">
             <Image
               width={200}
               height={200}
             src={user?.avatar || "https://static.vecteezy.com/system/resources/thumbnails/009/734/564/small_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"}
               alt="Avatar"
-              className="w-24 h-24 object-cover object-center rounded-full border"
+              className="md:w-24 md:h-24 h-14 w-14 object-cover object-center rounded-full border"
             />
             {/* <EHImageUploader name="avatar" /> */}
             <div>
-              <h2 className="text-xl font-semibold">{user?.name}</h2>
-              <p className="flex items-center gap-2 text-gray-700 mt-1">
+              <h2 className="md:text-xl text-md font-semibold">{user?.name}</h2>
+              <p className="flex items-center gap-2 text-gray-700 mt-1 md:text-md text-sm">
                 <MdEmail /> {user?.email}
               </p>
               <p className="flex items-center gap-2 text-gray-700 mt-1 capitalize">

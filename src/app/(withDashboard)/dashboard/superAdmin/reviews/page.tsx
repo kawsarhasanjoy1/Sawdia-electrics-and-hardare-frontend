@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import ReusableTable from "@/component/dashboard/ui/ReusableTable";
 import { useGetAllReviewQuery } from "@/redux/api/reviewApi";
@@ -7,30 +8,12 @@ import { RotateCcw, Trash2 } from "lucide-react";
 import Image from "next/image";
 
 const ReviewPage = () => {
-  const { data } = useGetAllReviewQuery(undefined);
+  const { data, isLoading } = useGetAllReviewQuery(undefined);
   const review = data?.data;
   if (review?.length <= 0) {
     return <NotFound message="Review data not found" />;
   }
-  // const [softDelete] = useDeletedBrandMutation();
-  // const [restoreCategory] = useRestoreBrandMutation();
-  // const handleToDeleted = async (id: string) => {
-  //   try {
-  //     const res = await softDelete(id).unwrap();
-  //     if (res?.success) toast.success(res?.message);
-  //   } catch (err: any) {
-  //     toast.error(err?.data?.message);
-  //   }
-  // };
 
-  // const handleToRestore = async (id: string) => {
-  //   try {
-  //     const res = await restoreCategory(id).unwrap();
-  //     if (res?.success) toast.success(res?.message);
-  //   } catch (err: any) {
-  //     toast.error(err?.data?.message);
-  //   }
-  // };
 
   const columns = [
     {
@@ -69,11 +52,10 @@ const ReviewPage = () => {
       render: (row: any) => {
         return (
           <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              !row.isDeleted
+            className={`px-2 py-1 rounded-full text-xs font-medium ${!row.isDeleted
                 ? "bg-green-100 text-green-700"
                 : "bg-red-100 text-red-700"
-            }`}
+              }`}
           >
             {row?.isDeleted ? "InActive" : "Active"}
           </span>
@@ -108,8 +90,7 @@ const ReviewPage = () => {
             // onClick={() => handleToRestore(row._id)}
             disabled={row?.isDeleted === false}
             className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium
-              bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition ${
-                row?.isDeleted ? "cursor-pointer" : ""
+              bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition ${row?.isDeleted ? "cursor-pointer" : ""
               }`}
           >
             <RotateCcw size={16} /> Restore
@@ -117,9 +98,8 @@ const ReviewPage = () => {
           <button
             // onClick={() => handleToDeleted(row._id)}
             disabled={row?.isDeleted === true}
-            className={`p-2 rounded-lg hover:bg-red-100 text-red-600 ${
-              row?.isDeleted ? "" : "cursor-pointer"
-            }`}
+            className={`p-2 rounded-lg hover:bg-red-100 text-red-600 ${row?.isDeleted ? "" : "cursor-pointer"
+              }`}
           >
             <Trash2 size={18} />
           </button>
@@ -128,10 +108,10 @@ const ReviewPage = () => {
     },
   ];
   return (
-    <div>
-      <div>
-        <ReusableTable data={review} columns={columns} />
-      </div>
+    <div className="">
+      {
+        isLoading ? <Loading/> : <ReusableTable data={review} columns={columns} />
+      }
     </div>
   );
 };

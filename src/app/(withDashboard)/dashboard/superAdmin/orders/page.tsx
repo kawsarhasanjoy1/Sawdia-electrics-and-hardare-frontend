@@ -162,6 +162,7 @@ const OrdersPage = () => {
           onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
           value={filters?.searchTerm}
           placeholder="Enter your transactionId"
+          className="w-full h-12"
         />
       </div>
       <ReusableTable columns={columns} data={orders} />

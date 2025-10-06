@@ -48,6 +48,7 @@ const blogApi = baseApi.injectEndpoints({
 export const {
   useCreateBlogMutation,
   useGetBlogQuery,
+  useRestoreBlogMutation,
   useDeleteBlogMutation,
   useTogglePublishMutation,
 } = blogApi;

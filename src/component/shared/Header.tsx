@@ -37,8 +37,8 @@ const Navbar = () => {
   const items = useAppSelector((store) => store.cart?.items);
   const { user, token } = useAppSelector((store) => store?.auth) as any;
   const router = useRouter();
-  const handleLogout = () => {
-    removeAllToken();
+  const handleLogout = async() => {
+   await removeAllToken();
     toast.info("Logout successful");
     router.push("/login");
   };

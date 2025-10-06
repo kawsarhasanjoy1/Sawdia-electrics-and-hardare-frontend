@@ -47,7 +47,7 @@ const AdminPaymentsPage = () => {
       header: "Txn ID",
       render: (row: any) => (
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs md:text-sm break-all">
+          <span className="font-mono text-xs md:text-sm ">
             {row.transactionId}
           </span>
           <button
@@ -150,6 +150,7 @@ const AdminPaymentsPage = () => {
           onChange={(e) => setFilters((prev) => ({ ...prev, searchTerm: e }))}
           value={filters?.searchTerm}
           placeholder="Enter your transactionId"
+          className="w-full h-12"
         />
       </div>
 
