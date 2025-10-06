@@ -24,6 +24,7 @@ export const LoginForm = () => {
         Cookie.set("accessToken", token);
         toast.success(res?.message);
         router.push("/");
+        window.location.reload()
       }
     } catch (err: any) {
       toast.error(err?.data?.message);
