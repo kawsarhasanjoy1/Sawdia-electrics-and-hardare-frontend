@@ -8,7 +8,7 @@ import { decodedToken } from "@/utils/decodedToken";
 
 // Constants
 const ACCESS_COOKIE = "accessToken";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://your-api-url.com/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://sawdia-electrics-and-hardare-frontend-1.onrender.com/api/v1";
 const REFRESH_URL = `${API_BASE}/auth/refresh-token`;
 
 const isProd = process.env.NODE_ENV === "production";
@@ -48,7 +48,7 @@ const refreshAccessToken = async (): Promise<string | undefined> => {
       .finally(() => {
         setTimeout(() => {
           refreshInProgress = null;
-        }, 100); // Slight delay to prevent rapid retry
+        }, 100); 
       });
   }
 
@@ -60,10 +60,11 @@ instance.interceptors.request.use((config: any) => {
   const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
 
   if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = token;
-  }
+  //  config.headers = config.headers || {};
+  config.headers.Authorization = token;
 
+  }
+  
   if (config.data && !(config.data instanceof FormData)) {
     config.headers["Content-Type"] = "application/json";
   }
