@@ -25,15 +25,15 @@ export const axiosBaseQuery =
         params,
         headers,
         withCredentials: true
-      })
-      return { data: result.data }
+      });
+      return { data: result.data };
     } catch (axiosError) {
-      const err = axiosError as AxiosError
+      const err = axiosError as AxiosError;
       return {
         error: {
           status: err.response?.status,
           data: err.response?.data || err.message,
         },
-      }
+      };
     }
   }

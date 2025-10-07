@@ -81,7 +81,7 @@ const CartPage = () => {
         notes,
         totalAmount,
       }).unwrap();
-
+      console.log(res)
       if (res?.success && res?.data?.redirectUrl) {
         dispatch(clearCart());
         toast.success("Redirecting to payment...");

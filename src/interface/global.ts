@@ -3,8 +3,8 @@ export type TProduct = {
   id: string;
   name: string;
   description: string;
-  brand: string;
-  category: string | null;
+  brandId: any;
+  categoryId: any | null;
   price: number;
   discountPrice?: number;
   images: string[];

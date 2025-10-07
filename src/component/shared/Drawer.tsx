@@ -5,7 +5,7 @@ import { MdLogout, MdOutlineClose } from "react-icons/md";
 import { ChevronDown } from "lucide-react";
 import SideBarItem from "@/utils/sidebar/sidebarItem";
 import { CgMenuLeftAlt } from "react-icons/cg";
-import {  useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { FaHome } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -34,6 +34,7 @@ const Drawer = () => {
     removeAllToken();
     toast.info("logout successful");
     router.push("/login");
+    window.location.reload()
   };
 
   const renderMenu = (items: any[], level = 0) => {
@@ -56,9 +57,8 @@ const Drawer = () => {
                       {item.title}
                     </span>
                     <ChevronDown
-                      className={`w-3 h-3 transform transition-transform ${
-                        openDropdowns[item.title] ? "rotate-180" : "rotate-0"
-                      }`}
+                      className={`w-3 h-3 transform transition-transform ${openDropdowns[item.title] ? "rotate-180" : "rotate-0"
+                        }`}
                     />
                   </button>
                   {openDropdowns[item.title] &&
@@ -101,9 +101,8 @@ const Drawer = () => {
       {/* Drawer Component */}
       <aside
         id="drawer-navigation"
-        className={`fixed md:static top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform bg-white dark:bg-gray-800 md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed md:static top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform bg-white dark:bg-gray-800 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         tabIndex={-1}
         aria-labelledby="drawer-navigation-label"
       >

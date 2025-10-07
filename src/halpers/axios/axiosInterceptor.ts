@@ -2,7 +2,6 @@
 
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
-import { store } from "@/redux/store";
 import { setUser, logOut } from "@/redux/api/features/authSlice";
 import { decodedToken } from "@/utils/decodedToken";
 
@@ -18,6 +17,9 @@ const COOKIE_OPTIONS: Cookies.CookieAttributes = {
   secure: true,
   expires: 365,
 };
+
+// Lazy store getter to prevent circular import
+const getStore = () => require('@/redux/store').store;
 
 // Create Axios instance
 const instance = axios.create({
@@ -48,7 +50,7 @@ const refreshAccessToken = async (): Promise<string | undefined> => {
       .finally(() => {
         setTimeout(() => {
           refreshInProgress = null;
-        }, 100); 
+        }, 100);
       });
   }
 
@@ -57,14 +59,13 @@ const refreshAccessToken = async (): Promise<string | undefined> => {
 
 // === Request Interceptor ===
 instance.interceptors.request.use((config: any) => {
+  const store = getStore();
   const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
 
   if (token) {
-  //  config.headers = config.headers || {};
-  config.headers.Authorization = token;
-
+    config.headers.Authorization = token;
   }
-  
+
   if (config.data && !(config.data instanceof FormData)) {
     config.headers["Content-Type"] = "application/json";
   }
@@ -87,7 +88,6 @@ instance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Handle 401: try refresh
     if (error.response.status === 401) {
       originalRequest._retry = true;
 
@@ -97,12 +97,15 @@ instance.interceptors.response.use(
         ["", "/", window.location.pathname].forEach((path) => {
           Cookies.remove(ACCESS_COOKIE, { path });
         });
+
+        const store = getStore();
         store.dispatch(logOut());
+
         return Promise.reject(error);
       }
 
-      // Save new token
       Cookies.set(ACCESS_COOKIE, newToken, COOKIE_OPTIONS);
+      const store = getStore();
       store.dispatch(setUser({ user: decodedToken(newToken), token: newToken }));
 
       originalRequest.headers = originalRequest.headers || {};

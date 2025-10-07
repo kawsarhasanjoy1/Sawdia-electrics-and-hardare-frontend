@@ -37,10 +37,11 @@ const Navbar = () => {
   const items = useAppSelector((store) => store.cart?.items);
   const { user, token } = useAppSelector((store) => store?.auth) as any;
   const router = useRouter();
-  const handleLogout = async() => {
-   await removeAllToken();
+  const handleLogout = async () => {
+    await removeAllToken();
     toast.info("Logout successful");
     router.push("/login");
+    window.location.reload()
   };
   return (
     <header className="w-full bg-white shadow-md sticky top-0 z-50 max-w-screen mx-auto overflow-x-hidden overflow-y-hidden">
@@ -94,9 +95,9 @@ const Navbar = () => {
             </Link>
 
             {user && user?.role === "superAdmin" || user?.role == 'admin' ? (
-             ''
+              ''
             ) : (
-               <div className=" flex gap-5">
+              <div className=" flex gap-5">
                 <Link href="/cart" className="relative text-gray-700">
                   <p className="flex justify-center items-center text-white text-xs bg-red-600 w-5 h-5 absolute -top-2 -right-2 rounded-full">
                     {items?.length ? items?.length : 0}

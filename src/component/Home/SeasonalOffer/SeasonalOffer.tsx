@@ -13,11 +13,7 @@ const SeasonalOffersPage = () => {
 
   return (
     <section className="relative w-full bg-gradient-to-br from-[#fdfbfb] via-[#ebedee] to-[#e6e9f0] py-20">
-      {/* soft glowing background accents */}
-      {/* <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-purple-300/20 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 w-[40rem] h-[40rem] rounded-full bg-pink-300/20 blur-3xl" />
-      </div> */}
+     
 
       <div className="relative container mx-auto px-4">
         <CommonTitle
@@ -29,7 +25,7 @@ const SeasonalOffersPage = () => {
           {/* === BIG FEATURED OFFER === */}
           <div className="lg:col-span-2 relative overflow-hidden rounded-[34px] shadow-2xl group w-full h-[300px] sm:h-[400px] lg:h-full">
             <Image
-              src="https://thumbs.dreamstime.com/b/discount-stamp-vector-clip-art-33305813.jpg"
+              src="https://i.pinimg.com/736x/20/33/82/203382dd496fd81ece3ea88cbc9d9a8d.jpg"
               alt="Mega Discount"
               fill
               className="object-cover object-center transition-transform duration-700 group-hover:scale-110"
