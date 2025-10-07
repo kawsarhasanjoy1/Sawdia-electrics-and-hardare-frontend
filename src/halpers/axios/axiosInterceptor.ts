@@ -4,13 +4,14 @@ import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { setUser, logOut } from "@/redux/api/features/authSlice";
 import { decodedToken } from "@/utils/decodedToken";
+import storeAccesor from "@/redux/storeAccesor/storeAccessor";
 
-// Constants
 const ACCESS_COOKIE = "accessToken";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://sawdia-electrics-and-hardare-frontend-1.onrender.com/api/v1";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ??
+  "https://sawdia-electrics-and-hardare-frontend-1.onrender.com/api/v1";
 const REFRESH_URL = `${API_BASE}/auth/refresh-token`;
 
-const isProd = process.env.NODE_ENV === "production";
 const COOKIE_OPTIONS: Cookies.CookieAttributes = {
   path: "/",
   sameSite: "none",
@@ -18,16 +19,13 @@ const COOKIE_OPTIONS: Cookies.CookieAttributes = {
   expires: 365,
 };
 
-// Lazy store getter to prevent circular import
-const getStore = () => require('@/redux/store').store;
 
-// Create Axios instance
 const instance = axios.create({
   baseURL: API_BASE.endsWith("/") ? API_BASE : `${API_BASE}/`,
   withCredentials: true,
 });
 
-// === Refresh Token Control ===
+
 let allowRefresh = true;
 export const disableRefresh = () => {
   allowRefresh = false;
@@ -38,7 +36,6 @@ export const enableRefresh = () => {
 
 let refreshInProgress: Promise<string | undefined> | null = null;
 
-// === Only Run One Refresh at a Time ===
 const refreshAccessToken = async (): Promise<string | undefined> => {
   if (!allowRefresh) return undefined;
 
@@ -57,10 +54,9 @@ const refreshAccessToken = async (): Promise<string | undefined> => {
   return refreshInProgress;
 };
 
-// === Request Interceptor ===
+
 instance.interceptors.request.use((config: any) => {
-  const store = getStore();
-  const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
+  const token = storeAccesor.getState().auth.token || Cookies.get(ACCESS_COOKIE);
 
   if (token) {
     config.headers.Authorization = token;
@@ -73,7 +69,7 @@ instance.interceptors.request.use((config: any) => {
   return config;
 });
 
-// === Response Interceptor ===
+
 instance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -98,15 +94,12 @@ instance.interceptors.response.use(
           Cookies.remove(ACCESS_COOKIE, { path });
         });
 
-        const store = getStore();
-        store.dispatch(logOut());
-
+        storeAccesor.dispatch(logOut());
         return Promise.reject(error);
       }
 
       Cookies.set(ACCESS_COOKIE, newToken, COOKIE_OPTIONS);
-      const store = getStore();
-      store.dispatch(setUser({ user: decodedToken(newToken), token: newToken }));
+      storeAccesor.dispatch(setUser({ user: decodedToken(newToken), token: newToken }));
 
       originalRequest.headers = originalRequest.headers || {};
       originalRequest.headers.Authorization = newToken;
