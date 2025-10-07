@@ -14,7 +14,6 @@ import { addToCart } from "@/redux/api/features/cartSlice";
 import { useGetCouponsQuery } from "@/redux/api/couponApi";
 
 const ProductCard = ({ product }: { product: TProduct }) => {
-  console.log(product);
   const dispatch = useAppDispatch();
   const [saveProduct] = useSaveFavouriteProductMutation();
   const { data } = useGetSaveFavouriteProductQuery(undefined);
