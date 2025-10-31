@@ -24,6 +24,8 @@ const Filtering = ({ filters, setFilters }: any) => {
 
   const handleParentClick = (p: any) => {
     const newId = selectedParent === p._id ? "" : p._id;
+    setVariants({})
+    setSubCategory([])
     setSelectedParent(newId);
     setFilters((prev: any) => ({
       ...prev,
@@ -35,6 +37,7 @@ const Filtering = ({ filters, setFilters }: any) => {
   };
 
   const handleSubClick = (sub: any) => {
+
     setSubCategory(TSCHEMA[sub?.name]),
       setVariants({});
     setFilters((prev: any) => ({
@@ -89,7 +92,7 @@ const Filtering = ({ filters, setFilters }: any) => {
     }
   }, [selectedParent, setFilters]);
   return (
-    <div className="space-y-5 p-4  max-full  bg-white md:w-60 shadow-2xl">
+    <div className="space-y-5 p-4  max-full  bg-white md:w-60 shadow-2xl h-screen overflow-y-auto">
       {/* Parent Category */}
       <div>
         <p className="font-bold mb-2">Parent Category</p>
