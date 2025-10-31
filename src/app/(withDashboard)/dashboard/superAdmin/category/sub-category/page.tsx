@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { toast } from "react-toastify";
-import {  RotateCcw, Trash2 } from "lucide-react";
+import { RotateCcw, Trash2 } from "lucide-react";
 
 import ReusableTable from "@/component/dashboard/ui/ReusableTable";
 import SearchBox from "@/component/dashboard/ui/SearchInput";
@@ -21,6 +21,7 @@ const Category = () => {
     searchTerm: "",
     page: 1,
     limit: 10,
+    sort: 'createdAt'
   });
 
   const query = useMemo(() => ({ ...filters }), [filters]);
@@ -64,11 +65,10 @@ const Category = () => {
       header: "Status",
       render: (row: any) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            !row.isDeleted
+          className={`px-2 py-1 rounded-full text-xs font-medium ${!row.isDeleted
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
-          }`}
+            }`}
         >
           {row.isDeleted ? "Inactive" : "Active"}
         </span>
@@ -94,13 +94,12 @@ const Category = () => {
       header: "Actions",
       render: (row: any) => (
         <div className="flex items-center justify-start gap-2">
-        
+
           <button
             onClick={() => handleToRestore(row._id)}
             disabled={!row.isDeleted}
             className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium
-              bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition ${
-                row.isDeleted ? "cursor-pointer" : "opacity-50"
+              bg-yellow-100 text-yellow-700 hover:bg-yellow-200 transition ${row.isDeleted ? "cursor-pointer" : "opacity-50"
               }`}
           >
             <RotateCcw size={16} /> Restore
@@ -108,9 +107,8 @@ const Category = () => {
           <button
             onClick={() => handleToDeleted(row._id)}
             disabled={row.isDeleted}
-            className={`p-2 rounded-lg hover:bg-red-100 text-red-600 ${
-              row.isDeleted ? "opacity-50" : "cursor-pointer"
-            }`}
+            className={`p-2 rounded-lg hover:bg-red-100 text-red-600 ${row.isDeleted ? "opacity-50" : "cursor-pointer"
+              }`}
           >
             <Trash2 size={18} />
           </button>

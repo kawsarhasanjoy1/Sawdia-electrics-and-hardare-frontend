@@ -8,7 +8,7 @@ import { decodedToken } from "@/utils/decodedToken";
 
 // Constants
 const ACCESS_COOKIE = "accessToken";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://sawdia-electrics-and-hardare-frontend-1.onrender.com/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://sawdia-electrics-and-hardare-backen.vercel.app/api/v1";
 const REFRESH_URL = `${API_BASE}/auth/refresh-token`;
 
 const isProd = process.env.NODE_ENV === "production";
@@ -57,14 +57,13 @@ const refreshAccessToken = async (): Promise<string | undefined> => {
 
 // === Request Interceptor ===
 instance.interceptors.request.use((config: any) => {
-  const token = store.getState().auth.token || Cookies.get(ACCESS_COOKIE);
-
+  const token =  Cookies.get(ACCESS_COOKIE);
   if (token) {
-   config.headers = config.headers || {};
-  config.headers.Authorization = token;
+    config.headers = config.headers || {};
+    config.headers.Authorization = token;
 
   }
-  
+
   if (config.data && !(config.data instanceof FormData)) {
     config.headers["Content-Type"] = "application/json";
   }
@@ -88,15 +87,17 @@ instance.interceptors.response.use(
     }
 
     // Handle 401: try refresh
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
+      console.log(error.response)
       originalRequest._retry = true;
 
       const newToken = await refreshAccessToken();
-
+      console.log(newToken)
       if (!newToken) {
         ["", "/", window.location.pathname].forEach((path) => {
           Cookies.remove(ACCESS_COOKIE, { path });
         });
+        Cookies.remove('refreshToken',{path: '/'})
         store.dispatch(logOut());
         return Promise.reject(error);
       }

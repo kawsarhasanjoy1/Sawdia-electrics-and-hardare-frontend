@@ -21,6 +21,7 @@ const ParentCategoryTable = () => {
     searchTerm: "",
     page: 1,
     limit: 10,
+    sort: 'createdAt'
   });
 
   const query = useMemo(() => ({ ...filters }), [filters]);

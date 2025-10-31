@@ -7,11 +7,10 @@ import Product from "@/component/Home/Products/Product";
 import Review from "@/component/Home/Review/Review";
 import SeasonalOffersPage from "@/component/Home/SeasonalOffer/SeasonalOffer";
 import OurServices from "@/component/Home/Services/OurServicest";
-import Container from "@/component/shared/Container";
 
 export default function Home() {
   return (
-    <Container>
+    <>
       <Carousel />
       <AllCategory />
       <Product />
@@ -20,7 +19,6 @@ export default function Home() {
       <OurServices />
       <Review />
       <Blog />
-      <Branch />
-    </Container>
+      <Branch /></>
   );
 }

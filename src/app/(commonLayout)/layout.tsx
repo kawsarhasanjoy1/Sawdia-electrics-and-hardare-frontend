@@ -10,7 +10,9 @@ export default function RootLayout({
   return (
     <div>
       <Navbar />
-      <Container>{children}</Container>
+      <Container className=" space-y-4 md:space-y-10 mt-4">
+        {children}
+      </Container>
       <Footer />
     </div>
   );

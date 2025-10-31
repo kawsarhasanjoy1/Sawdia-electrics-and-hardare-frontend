@@ -1,5 +1,5 @@
 export const getSingleProduct = async (id: string) => {
-  const res = await fetch(`https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/product/${id}`, {
+  const res = await fetch(`https://sawdia-electrics-and-hardare-backen.vercel.app/api/v1/product/${id}`, {
     cache: "force-cache",
     next: { revalidate: 10 },
   });

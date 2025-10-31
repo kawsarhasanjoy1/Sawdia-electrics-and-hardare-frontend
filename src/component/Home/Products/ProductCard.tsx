@@ -61,7 +61,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
   };
 
   return (
-    <div className="group md:relative w-full h-[420px] max-w-sm bg-white/80 rounded-xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-500 backdrop-blur-md hover:scale-[1.03]">
+    <div className="group md:relative w-full h-[430px] max-w-sm bg-white/80 rounded-xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-500 backdrop-blur-md hover:scale-[1.03]">
       <Link href={`/products/${product?._id}`}>
         <div className="relative md:h-56 h-36 w-full overflow-hidden">
           <Image
@@ -77,11 +77,11 @@ const ProductCard = ({ product }: { product: TProduct }) => {
 
         <div className="p-4">
 
-          <h3 className="md:text-lg text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-green-600 transition">
+          <h3 className="md:text-lg text-sm font-semibold text-gray-800 line-clamp-1 group-hover:text-green-600 transition">
             {product?.name}
           </h3>
 
-          <div className="mt-2 text-sm text-gray-600 flex flex-wrap md:gap-4 gap-1">
+          <div className=" text-sm text-gray-600 flex flex-col gap-1">
             <span>
               <strong>Brand:</strong> {product?.brandId?.name || "N/A"}
             </span>

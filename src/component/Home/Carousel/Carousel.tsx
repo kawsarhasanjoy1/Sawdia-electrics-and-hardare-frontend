@@ -5,10 +5,10 @@ import { useCallback, useEffect, useState } from "react";
 const Carousel = () => {
   const [currentSlider, setCurrentSlider] = useState(0);
   const carouselImages = [
+    "https://pcbros.tech/cdn/shop/products/PXL_20220407_135813056.PORTRAIT.jpg?v=1711649579&width=3979",
     "https://media.istockphoto.com/id/2205982417/photo/web-ui-ux-design-web-development-concept-a-web-developer-works-on-a-website-surrounded-by.jpg?s=1024x1024&w=is&k=20&c=UO0dRVEsrMWr68MIfYYXW_YD2AI5ubzEVZN1Vr6-8mE=",
     "https://media.istockphoto.com/id/2192074735/photo/autonomous-vehicles-glowing-neon-text-microchip-icon-wireless-signals-self-driving-car.jpg?s=1024x1024&w=is&k=20&c=ld71Mv0Q2JsNw5UkdQteWI4WRDU-cs72SoxIyD_4Mg0=",
     "https://media.gettyimages.com/id/2184592690/video/artificial-intelligence-processor-unit.jpg?s=640x640&k=20&c=MkoMTz87PE2SdbGig58SF2WDL_dCi71QFgRyKMSErsk=",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZJnRNfGXX1m4idqYmVGcbnIsddQMMntWlxA&s",
   ];
 
   const prevSlider = () =>

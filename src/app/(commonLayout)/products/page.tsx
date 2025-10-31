@@ -27,40 +27,45 @@ const Products = () => {
     }));
   }, [parentC]);
   const query = useMemo(() => ({ ...filters }), [filters]);
-  const { data: productData, isLoading } = useGetAllProductQuery(query);
+  const { data: productData, isLoading, isFetching } = useGetAllProductQuery(query);
   const products = productData?.data?.data || [];
   const meta = productData?.data?.meta;
   const totalPages = meta?.totalPage || 1;
 
   return (
     <div className="mx-auto py-10 w-full">
-      <div className="w-full flex justify-center items-center mb-8">
-        <SearchBox
-          placeholder="Search product"
-          className="md:w-3/12 w-full border px-4 py-2 border-gray-400 focus:outline-none rounded-md"
-          value={filters?.searchTerm}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              searchTerm: e,
-            }))
-          }
-        />
-      </div>
+      {
+        products.length == 0 ? '' : <div className="w-full flex justify-center items-center mb-8">
+          <SearchBox
+            placeholder="Search product"
+            className="md:w-3/12 w-full border px-4 py-2 border-gray-400 focus:outline-none rounded-md"
+            value={filters?.searchTerm}
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                searchTerm: e,
+              }))
+            }
+          />
+        </div>
+      }
 
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 md:gap-20 gap-2">
         <div className="col-span-12 md:col-span-2">
           <Filtering filters={filters} setFilters={setFilters} />
         </div>
 
-        <div className="col-span-12 md:col-span-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
+        <div className="col-span-12 md:col-span-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-6">
           {isLoading ? (
             <div className="col-span-full h-full flex justify-center items-center py-20">
               <Loading fullScreen={false} text="Loading products..." />
             </div>
           ) : products?.length === 0 ? (
             <div className="col-span-full flex justify-center items-center py-20 w-full">
-              <NotFound message="No products found." />
+              <div className=" text-center space-y-2">
+                <p className=" text-2xl">No data not found</p>
+
+              </div>
             </div>
           ) : (
             products?.map((item: any) => (

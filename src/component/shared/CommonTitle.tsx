@@ -4,7 +4,7 @@ const CommonTitle = ({
   classN,
 }: {
   title: Record<string, any>;
-  description: string;
+  description?: string;
   classN?: string;
 }) => {
   return (

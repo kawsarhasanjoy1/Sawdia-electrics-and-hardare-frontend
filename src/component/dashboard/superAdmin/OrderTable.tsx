@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 export const PendingOrder = () => {
   const { data: orderData } = useGetOrdersQuery({ status: "PENDING" });
   const order = orderData?.data?.data || [];
+  console.log(order)
   const [upStatus] = useUpdateOrderStatusMutation();
   const handleToStatus = async (e: any) => {
     const status = { id: e?.id, status: e?.status };
@@ -24,7 +25,7 @@ export const PendingOrder = () => {
     {
       key: "tran_id",
       header: "TransactionId",
-      render: (row: any) => <span>{row?.tran_id}</span>,
+      render: (row: any) => <span>{row?.transactionId}</span>,
     },
     {
       key: "status",
@@ -48,7 +49,7 @@ export const PendingOrder = () => {
     {
       key: "totalAmount",
       header: "Total Amount",
-      render: (row: any) => <span>${row?.totalAmount}</span>,
+      render: (row: any) => <span>${row?.totalPayable}</span>,
     },
     {
       key: "buyer",

@@ -9,6 +9,7 @@ export const removeAllToken = async () => {
   try {
     disableRefresh();
     await instance.post("/auth/logout");
+    Cookies.remove('refreshToken', { path: '/' })
   } catch (err) {
     console.error("Logout error:", err);
   } finally {

@@ -143,7 +143,7 @@ const ProductForm = () => {
             />
           </div>
 
-  
+
           <div className="mt-8">
             <h4 className="text-lg font-semibold mb-3 text-indigo-700 dark:text-indigo-300">
               Variant (Top 4)

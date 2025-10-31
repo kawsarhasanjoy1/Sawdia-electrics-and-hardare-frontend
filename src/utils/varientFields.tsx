@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import EHInput from "@/component/Form/EHInput";
 import EHSelect from "@/component/Form/EHSelect";
-import { SCHEMAS } from "@/constance/productVariantConstance";
+import {  TSCHEMA } from "@/constance/productVariantConstance";
 
 
 
@@ -20,12 +20,11 @@ type VariantDef = {
 
 const VariantFields = ({ subCategoryName }: { subCategoryName?: string | any }) => {
   const schemaKey = useMemo(
-    () => (subCategoryName && SCHEMAS[subCategoryName] ? subCategoryName : "__default__"),
+    () => (subCategoryName && TSCHEMA[subCategoryName] ? subCategoryName : "__default__"),
     [subCategoryName]
   );
 
-  const schema: VariantDef[] = SCHEMAS[schemaKey] || [];
-
+  const schema: VariantDef[] = TSCHEMA[schemaKey] || [];
 
   const { setValue } = useFormContext();
   useEffect(() => {

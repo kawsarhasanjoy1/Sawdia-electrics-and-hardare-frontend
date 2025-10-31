@@ -1,6 +1,6 @@
 export async function getBlogApi() {
   const url =
-    "https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/blog";
+    "https://sawdia-electrics-and-hardare-backen.vercel.app/api/v1/blog";
   const res = await fetch(url, { cache: "no-store" });
 
   if (!res.ok) {
@@ -14,7 +14,7 @@ export async function getBlogApi() {
 
 export const getSingleBlog = async (id: string) => {
   const res = await fetch(
-    `https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/blog/${id}`,
+    `https://sawdia-electrics-and-hardare-backen.vercel.app/api/v1/blog/${id}`,
     {
       cache: "no-store",
       next: { revalidate: 10 },
@@ -26,7 +26,7 @@ export const getSingleBlog = async (id: string) => {
 
 export const getParentCategoryAPi = async () => {
   const res = await fetch(
-    `https://sawdia-electrics-and-hardare-backend.onrender.com/api/v1/parent-category`,
+    `https://sawdia-electrics-and-hardare-backen.vercel.app/api/v1/parent-category`,
     {
       cache: "force-cache",
       next: { revalidate: 10 },

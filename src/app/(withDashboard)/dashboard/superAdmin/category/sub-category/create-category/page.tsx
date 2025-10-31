@@ -19,6 +19,7 @@ const CategoryDefaultValue = {
 const CategoryForm = () => {
   const { data: parentCategories } = useGetAllParentCategoryQuery({
     isDeleted: false,
+    sort: 'createdAt'
   });
   const [createCategory] = useCreateCategoryMutation();
 

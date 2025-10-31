@@ -27,6 +27,7 @@ const BrandForm = () => {
 
   const { data: parentRes } = useGetAllParentCategoryQuery({
     isDeleted: false,
+    sort: 'createdAt'
   });
 
   const parentList = parentRes?.data?.data ?? [];
@@ -34,7 +35,7 @@ const BrandForm = () => {
     parentList?.map((p: any) => ({ label: p?.name, value: p?._id })) ?? [];
 
   const { data: catRes, isFetching: catLoading } = useGetAllCategoryQuery(
-    { isDeleted: false, parentCategory: selectedParentId },
+    { isDeleted: false, parentCategory: selectedParentId, sort: 'createdAt' },
     { skip: !selectedParentId }
   );
 
@@ -45,7 +46,6 @@ const BrandForm = () => {
   const [brandOptions, setBrandOptions] = useState<
     { label: string; value: string }[]
   >([]);
-
   const handleParentChange = (value: string) => {
     setSelectedParentId(value);
     setSelectedCategoryId("");
@@ -57,13 +57,13 @@ const BrandForm = () => {
 
     const selected = catList.find((c: any) => c?._id === value);
     const catName = (selected?.name || "") as AllCategoryName;
-  
 
     const brands = allBrands[catName] || [];
     setBrandOptions(brands.map((b) => ({ label: b, value: b })));
   };
 
   const onSubmit = async (values: FieldValues) => {
+    console.log(values)
     if (!values.parentCategory || !values.categoryId || !values.name) {
       toast.error("Please select parent, category, and brand");
       return;

@@ -2,10 +2,12 @@ import { useGetAllParentCategoryQuery } from "@/redux/api/parentCategoryApi";
 import { useGetAllCategoryQuery } from "@/redux/api/categoryApi";
 import { useGetAllBrandQuery } from "@/redux/api/brandApi";
 import { useState, useEffect } from "react";
+import { TSCHEMA } from "@/constance/productVariantConstance";
 
 const Filtering = ({ filters, setFilters }: any) => {
   const [selectedParent, setSelectedParent] = useState<string>("");
-
+  const [subCategory, setSubCategory] = useState<any[]>([])
+  const [varients, setVariants] = useState<Record<string, string>>({})
   const { data: parentCategories } = useGetAllParentCategoryQuery(undefined);
   const parentOptions = parentCategories?.data?.data || [];
 
@@ -32,10 +34,12 @@ const Filtering = ({ filters, setFilters }: any) => {
     }));
   };
 
-  const handleSubClick = (subId: string) => {
+  const handleSubClick = (sub: any) => {
+    setSubCategory(TSCHEMA[sub?.name]),
+      setVariants({});
     setFilters((prev: any) => ({
       ...prev,
-      category: subId,
+      category: sub?._id,
       brand: "",
       page: 1,
     }));
@@ -57,15 +61,35 @@ const Filtering = ({ filters, setFilters }: any) => {
       page: 1,
     }));
   };
+  const handleVariants = (key: string, value: string) => {
+    let next: Record<string, any> = {};
+    setVariants(prev => {
+      next = { ...prev };
+      if (next[key] === value) {
+        delete next[key];
+      } else {
+        next[key] = value;
+      }
+
+
+
+      return next;
+    });
+    setFilters((prev: any) => ({
+      ...prev,
+      variants: JSON.stringify(next),
+      page: 1,
+    }));
+  };
+
 
   useEffect(() => {
     if (!selectedParent) {
       setFilters((prev: any) => ({ ...prev, category: "", brand: "" }));
     }
   }, [selectedParent, setFilters]);
-
   return (
-    <div className="space-y-5 border-1 rounded-xl p-4 overflow-y-scroll max-h-[570px] md:fixed md:top-[15%] bg-gray-400 md:w-60">
+    <div className="space-y-5 p-4  max-full  bg-white md:w-60 shadow-2xl">
       {/* Parent Category */}
       <div>
         <p className="font-bold mb-2">Parent Category</p>
@@ -88,9 +112,9 @@ const Filtering = ({ filters, setFilters }: any) => {
           {subOptions.map((s: any) => (
             <label key={s._id} className="flex gap-2 cursor-pointer">
               <input
-                type="radio"
+                type="checkbox"
                 checked={filters.category === s._id}
-                onChange={() => handleSubClick(s._id)}
+                onChange={() => handleSubClick(s)}
               />
               {s.name}
             </label>
@@ -105,7 +129,7 @@ const Filtering = ({ filters, setFilters }: any) => {
           {brandOptions.map((b: any) => (
             <label key={b._id} className="flex gap-2 cursor-pointer">
               <input
-                type="radio"
+                type="checkbox"
                 checked={filters.brand === b._id}
                 onChange={() => handleBrandClick(b._id)}
               />
@@ -114,6 +138,22 @@ const Filtering = ({ filters, setFilters }: any) => {
           ))}
         </div>
       )}
+
+      {/* variants filter */}
+
+      {
+        subCategory?.map((item, index) => {
+          return (
+            <div key={index}>
+              <p className=" font-bold text-md mb-3">{item?.label}</p>
+              {item?.values?.map((name: string, index: number) => <label key={index} className=" flex gap-2 cursor-pointer">
+                <input onChange={() => handleVariants(item.key, name)} type="checkbox" checked={varients[item.key] === name} />
+                <p>{name}</p>
+              </label>)}
+            </div>
+          )
+        })
+      }
 
       {/* Price Filter */}
       <div>

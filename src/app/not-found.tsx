@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const NotFound = ({ message }: { message?: string }) => {
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <main className="min-h-screen flex items-center justify-center p-6 w-full">
       <div className="w-full max-w-xl text-center">
         <div className="rounded-2xl border bg-white shadow-sm p-10">
           <p className="text-sm font-semibold text-blue-600">404</p>

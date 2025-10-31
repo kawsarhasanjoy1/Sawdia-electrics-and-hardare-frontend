@@ -9,7 +9,6 @@ import {
   FaDollarSign,
   FaStar,
 } from "react-icons/fa";
-import OnlineUserList from "@/component/Home/OnlineUser/OnlineUser";
 import UserTable from "@/component/dashboard/superAdmin/UserTable";
 import { PendingOrder } from "@/component/dashboard/superAdmin/OrderTable";
 import LowStockProductsTable from "@/component/dashboard/superAdmin/LowStockProductsTable";
@@ -112,9 +111,6 @@ const DashboardSuperAdminHome = () => {
         <div className=" bg-gray-50 ">
           <h1 className="text-2xl font-bold mb-4">Low stock product</h1>
           <LowStockProductsTable/>
-        </div>
-        <div>
-          <OnlineUserList />
         </div>
       </div>
     </div>
