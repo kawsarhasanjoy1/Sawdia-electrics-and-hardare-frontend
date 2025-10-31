@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/(withDashboard)/dashboard/superAdmin/category/sub-category"
-  ],
+, "src/app/(commonLayout)/build-pc"  ],
   "exclude": [
     "node_modules"
   ]
