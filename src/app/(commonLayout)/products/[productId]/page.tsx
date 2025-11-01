@@ -11,7 +11,9 @@ const ProductDetailsPage = async ({ params }: any) => {
   const { productId } = await params;
   const data = await getSingleProduct(productId);
 
-  return <div>{data?.data && <ProductDetails product={data.data} />}</div>;
+  return <div>
+    
+    {data?.data && <ProductDetails product={data.data} />}</div>;
 };
 
 export default ProductDetailsPage;

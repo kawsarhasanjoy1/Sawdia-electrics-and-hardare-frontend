@@ -1,6 +1,7 @@
 import NotFound from "@/app/not-found";
 import BlogMainCard from "@/component/Home/Blog/BlogMainCard";
 import BlogSidebar from "@/component/Home/Blog/BlogSidebar";
+import CommonBanner from "@/component/shared/CommonBanner";
 import { getBlogApi, getParentCategoryAPi } from "@/hooks/blogs/getBlogs";
 import { generateMetadata } from "@/utils/ganeratedMeta";
 
@@ -20,6 +21,9 @@ const BlogPage = async () => {
 
   return (
     <div>
+      <div>
+         <CommonBanner title="Blog" subtitle="Learn more about the latest tech trends, product care tips, and buying advice." background="https://cdn.vectorstock.com/i/500p/35/83/modern-software-development-vector-24033583.jpg"/>
+      </div>
       {blogs?.length > 0 ? (
         <div className="container mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-3 space-y-6">

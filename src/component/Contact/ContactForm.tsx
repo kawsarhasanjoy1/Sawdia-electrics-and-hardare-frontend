@@ -20,7 +20,7 @@ const ContactForm = () => {
 
   return (
     <section className=" ">{/* <-- fixed: no space after '<' */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-14">
+      <div className="mx-auto ">
         <div className="md:col-span-3">
           <div className="relative rounded-2xl border border-white/20 bg-white/70 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.08)]">
             <div className="h-1 w-full rounded-t-2xl bg-gradient-to-r from-green-500 via-emerald-500 to-sky-500" />

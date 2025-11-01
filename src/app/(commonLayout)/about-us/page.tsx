@@ -11,6 +11,7 @@ import { FaFacebook, FaInstagram, FaTelegram } from "react-icons/fa";
 import AboutHero from "@/component/About/AboutHero";
 import TimeLine from "@/component/About/TimeLine";
 import OurTheam from "@/component/About/OurTheam";
+import CommonBanner from "@/component/shared/CommonBanner";
 
 export const metadata: Metadata = {
     title: "About Us | Sawdia Electronics",
@@ -32,6 +33,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
     return (
         <>
+        <CommonBanner title="About Us" subtitle="Learn more about our story and mission" background="https://png.pngtree.com/background/20250103/original/pngtree-3d-electronic-computer-hardware-technology-motherboard-digital-chip-picture-image_15585704.jpg"/>
             <AboutHero />
             <OurServices />
             <TimeLine />

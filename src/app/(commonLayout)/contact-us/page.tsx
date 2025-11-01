@@ -1,21 +1,21 @@
 'use client';
 import ContactForm from '@/component/Contact/ContactForm';
 import LocateUsCard from '@/component/Contact/LocateContact';
+import CommonBanner from '@/component/shared/CommonBanner';
 
 
 
 export default function ContactPage() {
     return (
-        <main className="px-4 md:px-6 lg:px-8 py-10">
+        <main className=" space-y-2 mb-10">
             <section className="">
-
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 content-center'>
+                 <CommonBanner title='Contact us' background='https://t3.ftcdn.net/jpg/05/47/40/44/360_F_547404496_ZV5aB55KPrKJ90qzD2zhoPhNbjn07wX3.jpg' subtitle='We’d love to hear from you'/>
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10'>
                     <ContactForm />
                     <LocateUsCard />
                 </div>
 
                 <aside>
-
                     <div className="rounded-xl overflow-hidden mt-5 border border-gray-200">
                         <iframe
                             title="Store location"

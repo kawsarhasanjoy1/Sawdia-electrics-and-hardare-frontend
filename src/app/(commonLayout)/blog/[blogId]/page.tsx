@@ -1,3 +1,4 @@
+import CommonBanner from "@/component/shared/CommonBanner";
 import { getSingleBlog } from "@/hooks/blogs/getBlogs";
 import { generateMetadata } from "@/utils/ganeratedMeta";
 import Image from "next/image";
@@ -16,7 +17,10 @@ const BlogDetailsPage = async ({ params }: any) => {
   const blog = await data?.data;
 
   return (
-    <div className="container mx-auto md:px-4 py-12">
+    <div className="container mx-auto">
+      <div className=" mb-5 md:mb-10">
+         <CommonBanner title="Blog Details" subtitle="Tech stories, expert advice, and inspiration from the world of electronics." background="https://cdn.vectorstock.com/i/500p/35/83/modern-software-development-vector-24033583.jpg"/>
+      </div>
       <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
         <div className="relative w-full h-48 md:h-[700px]">
           <Image

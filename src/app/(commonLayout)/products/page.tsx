@@ -3,6 +3,7 @@ import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import SearchBox from "@/component/dashboard/ui/SearchInput";
 import ProductCard from "@/component/Home/Products/ProductCard";
+import CommonBanner from "@/component/shared/CommonBanner";
 import Filtering from "@/component/ui/filtaring/Filtaring";
 import Pagination from "@/component/ui/Paginate/Pagination";
 import { useGetAllProductQuery } from "@/redux/api/productsApi";
@@ -33,7 +34,10 @@ const Products = () => {
   const totalPages = meta?.totalPage || 1;
 
   return (
-    <div className="mx-auto py-10 w-full">
+    <div className="mx-auto w-full">
+      <div className=" mb-6">
+        <CommonBanner title="Products" subtitle="Find exactly what you're looking for" background="https://ms.codes/cdn/shop/articles/8a6c2e45cfb9e32859e9e7fa80350ad1.jpg?v=1707848484"/>
+      </div>
       {
         products.length == 0 ? '' : <div className="w-full flex justify-center items-center mb-8">
           <SearchBox
